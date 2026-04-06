@@ -64,7 +64,7 @@ export const HADITH_BOOKS = [
 ];
 
 export const HADITHS: Hadith[] = [
-  // Sahih al-Bukhari
+  // Faith & Intentions
   {
     id: 1,
     text: "Actions are judged by intentions, and every person will get what they intended.",
@@ -75,6 +75,38 @@ export const HADITHS: Hadith[] = [
     grade: "Sahih",
     category: "Faith"
   },
+  // Parents & Mothers
+  {
+    id: 21,
+    text: "Heaven lies under the feet of mothers.",
+    arabic: "الْجَنَّةُ تَحْتَ أَقْدَامِ الأُمَّهَاتِ",
+    source: "Sunan an-Nasa'i",
+    narrator: "Mu'awiyah bin Jahimah",
+    reference: "Hadith 3106",
+    grade: "Hasan",
+    category: "Parents"
+  },
+  {
+    id: 22,
+    text: "A man asked: 'O Messenger of Allah! Who is most deserving of my fine treatment?' He said: 'Your mother, then your mother, then your mother, then your father.'",
+    arabic: "يَا رَسُولَ اللَّهِ مَنْ أَحَقُّ النَّاسِ بِحُسْنِ صَحَابَتِي قَالَ ‏أُمُّكَ‏ ثُمَّ أُمُّكَ ثُمَّ أُمُّكَ ثُمَّ أَبُوكَ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 5971",
+    grade: "Sahih",
+    category: "Parents"
+  },
+  {
+    id: 23,
+    text: "The pleasure of the Lord is in the pleasure of the parents, and the displeasure of the Lord is in the displeasure of the parents.",
+    arabic: "رِضَا الرَّبِّ فِي رِضَا الْوَالِدِ وَسُخْطُ الرَّبِّ فِي سُخْطِ الْوَالِدِ",
+    source: "Jami` at-Tirmidhi",
+    narrator: "Abdullah bin Amr",
+    reference: "Hadith 1899",
+    grade: "Sahih",
+    category: "Parents"
+  },
+  // Character & Manners
   {
     id: 2,
     text: "The best among you are those who have the best manners and character.",
@@ -95,16 +127,7 @@ export const HADITHS: Hadith[] = [
     grade: "Sahih",
     category: "Faith"
   },
-  {
-    id: 4,
-    text: "Verily, Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
-    arabic: "إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",
-    source: "Sahih Muslim",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 2564",
-    grade: "Sahih",
-    category: "Sincerity"
-  },
+  // Knowledge
   {
     id: 5,
     text: "Whoever follows a path in pursuit of knowledge, Allah will make easy for him a path to Paradise.",
@@ -116,16 +139,16 @@ export const HADITHS: Hadith[] = [
     category: "Knowledge"
   },
   {
-    id: 6,
-    text: "Cleanliness is half of faith.",
-    arabic: "الطَّهُورُ شَطْرُ الإِيمَانِ",
-    source: "Sahih Muslim",
-    narrator: "Abu Malik al-Ash'ari",
-    reference: "Hadith 223",
+    id: 13,
+    text: "Seeking knowledge is an obligation upon every Muslim.",
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Hadith 224",
     grade: "Sahih",
-    category: "Purity"
+    category: "Knowledge"
   },
-  // Sunan Abi Dawud
+  // Mercy & Social
   {
     id: 7,
     text: "The merciful will be shown mercy by the Most Merciful. Be merciful to those on the earth and the One in the heavens will have mercy upon you.",
@@ -137,109 +160,6 @@ export const HADITHS: Hadith[] = [
     category: "Mercy"
   },
   {
-    id: 8,
-    text: "A believer is not one who eats his fill while his neighbor beside him goes hungry.",
-    arabic: "لَيْسَ الْمُؤْمِنُ الَّذِي يَشْبَعُ وَجَارُهُ جَائِعٌ إِلَى جَنْبِهِ",
-    source: "Sunan Abi Dawud",
-    narrator: "Ibn Abbas",
-    reference: "Hadith 3501",
-    grade: "Sahih",
-    category: "Social"
-  },
-  // Jami` at-Tirmidhi
-  {
-    id: 9,
-    text: "Fear Allah wherever you are, follow up a bad deed with a good deed and it will wipe it out, and behave well towards people.",
-    arabic: "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
-    source: "Jami` at-Tirmidhi",
-    narrator: "Abu Dharr",
-    reference: "Hadith 1987",
-    grade: "Hasan",
-    category: "Character"
-  },
-  {
-    id: 10,
-    text: "He who does not show mercy to our young ones or recognize the rights of our elders is not one of us.",
-    arabic: "لَيْسَ مِنَّا مَنْ لَمْ يَرْحَمْ صَغِيرَنَا وَيَعْرِفْ شَرَفَ كَبِيرَنَا",
-    source: "Jami` at-Tirmidhi",
-    narrator: "Abdullah ibn Amr",
-    reference: "Hadith 1920",
-    grade: "Sahih",
-    category: "Social"
-  },
-  // Sunan an-Nasa'i
-  {
-    id: 11,
-    text: "Islam is built on five: Testifying that there is no god but Allah and Muhammad is the Messenger of Allah...",
-    arabic: "بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ",
-    source: "Sunan an-Nasa'i",
-    narrator: "Ibn Umar",
-    reference: "Hadith 5001",
-    grade: "Sahih",
-    category: "Faith"
-  },
-  {
-    id: 12,
-    text: "The prayer of one who is in a state of impurity is not accepted until he performs ablution.",
-    arabic: "لَا تُقْبَلُ صَلَاةٌ بِغَيْرِ طُهُورٍ",
-    source: "Sunan an-Nasa'i",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 139",
-    grade: "Sahih",
-    category: "Purity"
-  },
-  // Sunan Ibn Majah
-  {
-    id: 13,
-    text: "Seeking knowledge is an obligation upon every Muslim.",
-    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 224",
-    grade: "Sahih",
-    category: "Knowledge"
-  },
-  {
-    id: 14,
-    text: "Two characteristics are never found together in a believer: Misery and bad manners.",
-    arabic: "خَصْلَتَانِ لَا تَجْتَمِعَانِ فِي مُؤْمِنٍ الْبُخْلُ وَسُوءُ الْخُلُقِ",
-    source: "Sunan Ibn Majah",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 3979",
-    grade: "Hasan",
-    category: "Character"
-  },
-  {
-    id: 15,
-    text: "Allah is Beautiful and He loves beauty.",
-    arabic: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
-    source: "Sahih Muslim",
-    narrator: "Abdullah ibn Mas'ud",
-    reference: "Hadith 172",
-    grade: "Sahih",
-    category: "Spirituality"
-  },
-  {
-    id: 16,
-    text: "The most beloved of deeds to Allah are those that are most consistent, even if they are small.",
-    arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
-    source: "Sahih al-Bukhari",
-    narrator: "Aisha",
-    reference: "Hadith 6465",
-    grade: "Sahih",
-    category: "Worship"
-  },
-  {
-    id: 17,
-    text: "A Muslim is the one from whose tongue and hands the Muslims are safe.",
-    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abdullah bin Amr",
-    reference: "Hadith 10",
-    grade: "Sahih",
-    category: "Social"
-  },
-  {
     id: 18,
     text: "The parable of the believers in their mutual love, mercy and compassion is that of a body; when any limb aches, the whole body reacts with sleeplessness and fever.",
     arabic: "مَثَلُ الْمُؤْمِنِينَ فِي تَوَادِّهِمْ وَتَرَاحُمِهِمْ وَتَعَاطُفِهِمْ مَثَلُ الْجَسَدِ إِذَا اشْتَكَى مِنْهُ عُضْوٌ تَدَاعَى لَهُ سَائِرُ الْجَسَدِ بِالسَّهَرِ وَالْحُمَّى",
@@ -248,26 +168,6 @@ export const HADITHS: Hadith[] = [
     reference: "Hadith 2586",
     grade: "Sahih",
     category: "Social"
-  },
-  {
-    id: 19,
-    text: "Every religion has a character and the character of Islam is modesty (Haya).",
-    arabic: "إِنَّ لِكُلِّ دِينٍ خُلُقًا وَخُلُقُ الإِسْلاَمِ الْحَيَاءُ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 4181",
-    grade: "Hasan",
-    category: "Character"
-  },
-  {
-    id: 20,
-    text: "Whoever believes in Allah and the Last Day, let him speak good or remain silent.",
-    arabic: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 6018",
-    grade: "Sahih",
-    category: "Character"
   }
 ];
 

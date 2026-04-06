@@ -8,10 +8,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info, Lightbulb } from 'lucide-react';
+import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HADITHS, HADITH_BOOKS } from '@/lib/islamic-data';
-import { findHadith, FindHadithOutput } from '@/ai/flows/ai-hadith-finder';
+import { findHadith, FindHadithsOutput } from '@/ai/flows/ai-hadith-finder';
 
 export default function HadithPage() {
   const [mounted, setMounted] = useState(false);
@@ -22,7 +22,7 @@ export default function HadithPage() {
   
   // AI Researcher State
   const [isAiSearching, setIsAiSearching] = useState(false);
-  const [aiResult, setAiResult] = useState<FindHadithOutput['hadith'] | null>(null);
+  const [aiResults, setAiResults] = useState<FindHadithsOutput['results']>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -32,8 +32,6 @@ export default function HadithPage() {
 
   const filteredHadiths = HADITHS.filter(h => {
     const matchesCategory = activeCategory ? h.category === activeCategory : true;
-    
-    // Improved matching logic: extract main name part (e.g. "Bukhari", "Muslim")
     const matchesBook = selectedBook 
       ? h.source.toLowerCase().includes(selectedBook.toLowerCase()) 
       : true;
@@ -50,7 +48,6 @@ export default function HadithPage() {
   const handleBrowseBook = (bookId: string) => {
     const book = HADITH_BOOKS.find(b => b.id === bookId);
     if (book) {
-      // Map IDs to searchable source fragments
       const sourceMap: Record<string, string> = {
         'bukhari': 'Bukhari',
         'muslim': 'Muslim',
@@ -63,21 +60,21 @@ export default function HadithPage() {
       setActiveTab('all');
       setSearch('');
       setActiveCategory(null);
-      setAiResult(null);
+      setAiResults([]);
     }
   };
 
   const handleAiResearch = async () => {
     if (!search.trim()) return;
     setIsAiSearching(true);
-    setAiResult(null);
+    setAiResults([]);
     try {
       const result = await findHadith({ 
         query: search, 
         bookPreference: selectedBook || undefined 
       });
-      if (result.found && result.hadith) {
-        setAiResult(result.hadith);
+      if (result.results && result.results.length > 0) {
+        setAiResults(result.results);
       }
     } catch (error) {
       console.error(error);
@@ -88,7 +85,7 @@ export default function HadithPage() {
 
   const clearBookFilter = () => {
     setSelectedBook(null);
-    setAiResult(null);
+    setAiResults([]);
   };
 
   if (!mounted) {
@@ -102,18 +99,17 @@ export default function HadithPage() {
         <p className="text-muted-foreground">Words and actions of Prophet Muhammad (ﷺ).</p>
       </div>
 
-      {/* AI Tool Promotion Header */}
       <Alert className="rounded-3xl border-primary/20 bg-primary/5 py-6">
         <Sparkles className="h-5 w-5 text-primary" />
-        <AlertTitle className="text-primary font-bold font-headline mb-1">Access Full Canon with AI</AlertTitle>
+        <AlertTitle className="text-primary font-bold font-headline mb-1">Search the Full 30,000+ Canon</AlertTitle>
         <AlertDescription className="text-xs text-muted-foreground leading-relaxed">
-          While this library contains curated samples, you can search all 30,000+ canonical Hadiths. Just type a topic or reference below and use the <span className="font-bold text-primary">AI Researcher</span> button.
+          The local search shows curated highlights. For a complete search across all collections (like "mothers" or "patience"), type below and use the <span className="font-bold text-primary">AI Researcher</span>.
         </AlertDescription>
       </Alert>
 
       <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)}>
         <TabsList className="grid w-full grid-cols-2 rounded-2xl h-12 bg-muted/50 p-1 mb-6">
-          <TabsTrigger value="all" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">All Hadiths</TabsTrigger>
+          <TabsTrigger value="all" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Library</TabsTrigger>
           <TabsTrigger value="books" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Collections</TabsTrigger>
         </TabsList>
 
@@ -140,23 +136,67 @@ export default function HadithPage() {
                 ) : (
                   <Sparkles className="w-4 h-4 mr-2" />
                 )}
-                Ask AI Researcher for "{search}" in Canonical Books
+                Deep AI Search for "{search}" in Full Canon
               </Button>
             )}
           </div>
+
+          {/* AI Results Section */}
+          {aiResults.length > 0 && (
+             <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+               <div className="flex items-center justify-between px-2">
+                 <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em] flex items-center">
+                   <Sparkles className="w-3 h-3 mr-2" />
+                   AI Research Results ({aiResults.length})
+                 </h3>
+                 <button onClick={() => setAiResults([])} className="text-[10px] font-bold text-muted-foreground hover:text-primary transition-colors">CLEAR</button>
+               </div>
+               
+               {aiResults.map((res, idx) => (
+                 <Card key={idx} className="rounded-[2.5rem] border-primary/30 overflow-hidden bg-primary/5 shadow-md">
+                  <CardContent className="p-8 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge className="bg-primary text-primary-foreground text-[10px] uppercase font-bold px-3">
+                        {res.source}
+                      </Badge>
+                      <Badge variant="outline" className="border-primary/20 text-primary font-bold text-[10px]">
+                        {res.grade}
+                      </Badge>
+                    </div>
+                    <div className="space-y-6">
+                      <p className="text-right text-2xl font-arabic leading-loose text-primary">
+                        {res.arabic}
+                      </p>
+                      <p className="text-base leading-relaxed text-foreground font-medium italic border-l-4 border-primary/20 pl-6">
+                        "{res.text}"
+                      </p>
+                      <div className="p-4 bg-white/50 rounded-2xl border border-primary/10 text-xs text-muted-foreground leading-relaxed">
+                        <div className="flex items-center gap-1 mb-1 font-bold text-primary">
+                          <Info className="w-3 h-3" /> Note
+                        </div>
+                        {res.explanation}
+                      </div>
+                    </div>
+                    <div className="pt-4 border-t border-primary/10 flex items-center justify-between text-[10px]">
+                      <span className="font-bold uppercase tracking-widest text-muted-foreground truncate max-w-[150px]">Narrated by {res.narrator}</span>
+                      <span className="font-mono font-bold text-primary shrink-0">{res.reference}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+               ))}
+               <div className="h-px bg-border/50 my-8" />
+             </div>
+          )}
 
           <div className="space-y-3">
             <div className="flex items-center justify-between px-1">
               <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
                 <Filter className="w-3 h-3" />
-                Filters
+                Quick Filters
               </div>
               {selectedBook && (
-                <button 
-                  onClick={clearBookFilter}
-                  className="text-[10px] font-bold text-primary underline uppercase tracking-widest"
-                >
-                  Clear Collection Filter
+                <button onClick={clearBookFilter} className="text-[10px] font-bold text-primary underline uppercase tracking-widest">
+                  Clear Book
                 </button>
               )}
             </div>
@@ -165,10 +205,10 @@ export default function HadithPage() {
                 onClick={() => setActiveCategory(null)}
                 className={cn(
                   "px-5 py-2.5 rounded-full text-xs font-bold transition-all border shrink-0 uppercase tracking-wider",
-                  activeCategory === null ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-card text-muted-foreground border-border/50 hover:bg-accent/10"
+                  activeCategory === null ? "bg-primary text-primary-foreground border-primary" : "bg-card text-muted-foreground border-border/50"
                 )}
               >
-                All Categories
+                All
               </button>
               {categories.map((cat) => (
                 <button
@@ -176,7 +216,7 @@ export default function HadithPage() {
                   onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
                   className={cn(
                     "px-5 py-2.5 rounded-full text-xs font-bold transition-all border shrink-0 uppercase tracking-wider",
-                    activeCategory === cat ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-card text-muted-foreground border-border/50 hover:bg-accent/10"
+                    activeCategory === cat ? "bg-primary text-primary-foreground border-primary" : "bg-card text-muted-foreground border-border/50"
                   )}
                 >
                   {cat}
@@ -185,71 +225,20 @@ export default function HadithPage() {
             </div>
           </div>
 
-          {selectedBook && (
-            <div className="px-1 flex items-center justify-between">
-              <Badge variant="outline" className="rounded-full bg-accent/5 border-accent/20 text-accent font-bold py-1 px-4">
-                Collection: {selectedBook}
-              </Badge>
-              <span className="text-[10px] text-muted-foreground italic">Showing local sample</span>
-            </div>
-          )}
-
-          {/* AI Result Card */}
-          {aiResult && (
-             <div className="space-y-3 animate-in fade-in slide-in-from-top-4 duration-500">
-               <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em] ml-2 flex items-center">
-                 <Sparkles className="w-3 h-3 mr-2" />
-                 AI Research Result
-               </h3>
-               <Card className="rounded-[2.5rem] border-primary/30 overflow-hidden bg-primary/5 shadow-lg">
-                <CardContent className="p-8 space-y-6">
-                  <div className="flex items-center justify-between">
-                    <Badge className="bg-primary text-primary-foreground text-[10px] uppercase font-bold">
-                      {aiResult.source}
-                    </Badge>
-                    <Badge variant="outline" className="border-primary/20 text-primary font-bold text-[10px]">
-                      {aiResult.grade}
-                    </Badge>
-                  </div>
-                  <div className="space-y-6">
-                    <p className="text-right text-3xl font-arabic leading-[4.5rem] text-primary">
-                      {aiResult.arabic}
-                    </p>
-                    <p className="text-lg leading-relaxed text-foreground font-medium italic border-l-4 border-primary/20 pl-6">
-                      "{aiResult.text}"
-                    </p>
-                    <div className="p-4 bg-white/50 rounded-2xl border border-primary/10 text-xs text-muted-foreground leading-relaxed">
-                      <div className="flex items-center gap-1 mb-1 font-bold text-primary">
-                        <Info className="w-3 h-3" /> Context
-                      </div>
-                      {aiResult.explanation}
-                    </div>
-                  </div>
-                  <div className="pt-6 border-t border-primary/10 flex items-center justify-between text-[10px]">
-                    <span className="font-bold uppercase tracking-widest text-muted-foreground">Narrated by {aiResult.narrator}</span>
-                    <span className="font-mono font-bold text-primary">{aiResult.reference}</span>
-                  </div>
-                </CardContent>
-              </Card>
-             </div>
-          )}
-
           <div className="space-y-6">
             {filteredHadiths.length > 0 ? filteredHadiths.map((hadith) => (
               <Card key={hadith.id} className="rounded-[2.5rem] border-border/30 overflow-hidden bg-card shadow-sm hover:shadow-md transition-shadow group">
                 <CardContent className="p-8 space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="flex gap-2">
-                      <Badge variant="secondary" className="bg-accent/10 text-accent border-none font-bold text-[10px] uppercase tracking-tighter">
+                      <Badge variant="secondary" className="bg-accent/10 text-accent border-none font-bold text-[10px] uppercase tracking-tighter px-3">
                         {hadith.source}
                       </Badge>
                       <Badge 
                         variant="outline" 
                         className={cn(
                           "font-bold text-[10px] uppercase tracking-tighter px-3",
-                          hadith.grade === 'Sahih' ? "border-emerald-500/30 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10" : 
-                          hadith.grade === 'Hasan' ? "border-amber-500/30 text-amber-600 bg-amber-50 dark:bg-amber-900/10" : 
-                          "border-rose-500/30 text-rose-600 bg-rose-50 dark:bg-rose-900/10"
+                          hadith.grade === 'Sahih' ? "border-emerald-500/30 text-emerald-600 bg-emerald-50" : "border-amber-500/30 text-amber-600 bg-amber-50"
                         )}
                       >
                         {hadith.grade}
@@ -263,13 +252,13 @@ export default function HadithPage() {
 
                   <div className="space-y-6">
                     {hadith.arabic && (
-                      <p className="text-right text-3xl font-arabic leading-[4.5rem] text-primary group-hover:text-accent transition-colors">
+                      <p className="text-right text-3xl font-arabic leading-loose text-primary group-hover:text-accent transition-colors">
                         {hadith.arabic}
                       </p>
                     )}
                     <div className="relative">
-                      <Quote className="absolute -left-4 -top-4 w-10 h-10 text-accent/10 -z-10 group-hover:text-accent/20 transition-colors" />
-                      <p className="text-lg leading-relaxed text-foreground font-medium border-l-4 border-accent/20 pl-6 py-1">
+                      <Quote className="absolute -left-4 -top-4 w-10 h-10 text-accent/10 -z-10" />
+                      <p className="text-lg leading-relaxed text-foreground font-medium border-l-4 border-accent/20 pl-6">
                         "{hadith.text}"
                       </p>
                     </div>
@@ -287,11 +276,11 @@ export default function HadithPage() {
                   </div>
                 </CardContent>
               </Card>
-            )) : !isAiSearching && !aiResult && (
+            )) : !isAiSearching && aiResults.length === 0 && (
               <div className="text-center py-20 opacity-30">
                 <BookOpen className="w-16 h-16 mx-auto mb-4" />
-                <p className="text-lg font-bold">No hadiths match your criteria.</p>
-                <p className="text-sm mt-2">Try using the AI Researcher button above to search the full canon.</p>
+                <p className="text-lg font-bold">No local results for "{search}".</p>
+                <p className="text-sm mt-2 px-6">The local library is small. Please use the <span className="font-bold">AI Researcher</span> button above to search the full 30,000+ canonical Hadiths.</p>
                 <Button variant="link" onClick={() => { setSearch(''); setActiveCategory(null); setSelectedBook(null); }} className="mt-4">
                   Reset all filters
                 </Button>
@@ -327,7 +316,7 @@ export default function HadithPage() {
                           </div>
                           <div className="flex items-center gap-1">
                             <BookOpen className="w-3 h-3" />
-                            Original Collection
+                            Original
                           </div>
                        </div>
                        <div className="pt-2 flex justify-end">
