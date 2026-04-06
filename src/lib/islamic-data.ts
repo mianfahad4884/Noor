@@ -71,7 +71,7 @@ export const HADITHS: Hadith[] = [
     arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
     source: "Sahih al-Bukhari",
     narrator: "Umar bin Al-Khattab",
-    reference: "Book 1, Hadith 1",
+    reference: "Hadith 1",
     grade: "Sahih",
     category: "Faith"
   },
@@ -81,7 +81,7 @@ export const HADITHS: Hadith[] = [
     arabic: "خِيَارُكُمْ أَحْسَنُكُمْ أَخْلاَقًا",
     source: "Sahih al-Bukhari",
     narrator: "Abdullah ibn Amr",
-    reference: "Book 78, Hadith 61",
+    reference: "Hadith 6035",
     grade: "Sahih",
     category: "Character"
   },
@@ -91,18 +91,17 @@ export const HADITHS: Hadith[] = [
     arabic: "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
     source: "Sahih al-Bukhari",
     narrator: "Anas bin Malik",
-    reference: "Book 2, Hadith 13",
+    reference: "Hadith 13",
     grade: "Sahih",
     category: "Faith"
   },
-  // Sahih Muslim
   {
     id: 4,
-    text: "Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
+    text: "Verily, Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
     arabic: "إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",
     source: "Sahih Muslim",
     narrator: "Abu Hurairah",
-    reference: "Book 45, Hadith 43",
+    reference: "Hadith 2564",
     grade: "Sahih",
     category: "Sincerity"
   },
@@ -112,7 +111,7 @@ export const HADITHS: Hadith[] = [
     arabic: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
     source: "Sahih Muslim",
     narrator: "Abu Hurairah",
-    reference: "Book 35, Hadith 6853",
+    reference: "Hadith 2699",
     grade: "Sahih",
     category: "Knowledge"
   },
@@ -122,7 +121,7 @@ export const HADITHS: Hadith[] = [
     arabic: "الطَّهُورُ شَطْرُ الإِيمَانِ",
     source: "Sahih Muslim",
     narrator: "Abu Malik al-Ash'ari",
-    reference: "Book 2, Hadith 432",
+    reference: "Hadith 223",
     grade: "Sahih",
     category: "Purity"
   },
@@ -139,13 +138,13 @@ export const HADITHS: Hadith[] = [
   },
   {
     id: 8,
-    text: "The best of your days is Friday. On that day Adam was created and on that day he died.",
-    arabic: "مِنْ أَفْضَلِ أَيَّامِكُمْ يَوْمَ الْجُمُعَةِ فِيهِ خُلِقَ آدَمُ وَفِيهِ قُبِضَ",
+    text: "A believer is not one who eats his fill while his neighbor beside him goes hungry.",
+    arabic: "لَيْسَ الْمُؤْمِنُ الَّذِي يَشْبَعُ وَجَارُهُ جَائِعٌ إِلَى جَنْبِهِ",
     source: "Sunan Abi Dawud",
-    narrator: "Aws ibn Aws",
-    reference: "Hadith 1047",
+    narrator: "Ibn Abbas",
+    reference: "Hadith 3501",
     grade: "Sahih",
-    category: "Worship"
+    category: "Social"
   },
   // Jami` at-Tirmidhi
   {
@@ -216,9 +215,59 @@ export const HADITHS: Hadith[] = [
     arabic: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
     source: "Sahih Muslim",
     narrator: "Abdullah ibn Mas'ud",
-    reference: "Book 1, Hadith 172",
+    reference: "Hadith 172",
     grade: "Sahih",
     category: "Spirituality"
+  },
+  {
+    id: 16,
+    text: "The most beloved of deeds to Allah are those that are most consistent, even if they are small.",
+    arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
+    source: "Sahih al-Bukhari",
+    narrator: "Aisha",
+    reference: "Hadith 6465",
+    grade: "Sahih",
+    category: "Worship"
+  },
+  {
+    id: 17,
+    text: "A Muslim is the one from whose tongue and hands the Muslims are safe.",
+    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abdullah bin Amr",
+    reference: "Hadith 10",
+    grade: "Sahih",
+    category: "Social"
+  },
+  {
+    id: 18,
+    text: "The parable of the believers in their mutual love, mercy and compassion is that of a body; when any limb aches, the whole body reacts with sleeplessness and fever.",
+    arabic: "مَثَلُ الْمُؤْمِنِينَ فِي تَوَادِّهِمْ وَتَرَاحُمِهِمْ وَتَعَاطُفِهِمْ مَثَلُ الْجَسَدِ إِذَا اشْتَكَى مِنْهُ عُضْوٌ تَدَاعَى لَهُ سَائِرُ الْجَسَدِ بِالسَّهَرِ وَالْحُمَّى",
+    source: "Sahih Muslim",
+    narrator: "Nu'man bin Bashir",
+    reference: "Hadith 2586",
+    grade: "Sahih",
+    category: "Social"
+  },
+  {
+    id: 19,
+    text: "Every religion has a character and the character of Islam is modesty (Haya).",
+    arabic: "إِنَّ لِكُلِّ دِينٍ خُلُقًا وَخُلُقُ الإِسْلاَمِ الْحَيَاءُ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Hadith 4181",
+    grade: "Hasan",
+    category: "Character"
+  },
+  {
+    id: 20,
+    text: "Whoever believes in Allah and the Last Day, let him speak good or remain silent.",
+    arabic: "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 6018",
+    grade: "Sahih",
+    category: "Character"
   }
 ];
 

@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen } from 'lucide-react';
+import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HADITHS, HADITH_BOOKS } from '@/lib/islamic-data';
+import { findHadith, FindHadithOutput } from '@/ai/flows/ai-hadith-finder';
 
 export default function HadithPage() {
   const [mounted, setMounted] = useState(false);
@@ -17,6 +18,10 @@ export default function HadithPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'books'>('all');
   const [selectedBook, setSelectedBook] = useState<string | null>(null);
+  
+  // AI Researcher State
+  const [isAiSearching, setIsAiSearching] = useState(false);
+  const [aiResult, setAiResult] = useState<FindHadithOutput['hadith'] | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -27,9 +32,9 @@ export default function HadithPage() {
   const filteredHadiths = HADITHS.filter(h => {
     const matchesCategory = activeCategory ? h.category === activeCategory : true;
     
-    // Improved book matching to handle source names like "Sunan an-Nasa'i" or "Sahih Muslim"
+    // Improved matching logic: extract main name part (e.g. "Bukhari", "Muslim")
     const matchesBook = selectedBook 
-      ? h.source.toLowerCase().includes(selectedBook.toLowerCase().replace('sahih ', '').replace('sunan ', '').replace('jami` at-', '').split(' ')[0]) 
+      ? h.source.toLowerCase().includes(selectedBook.toLowerCase()) 
       : true;
 
     const matchesSearch = 
@@ -44,23 +49,45 @@ export default function HadithPage() {
   const handleBrowseBook = (bookId: string) => {
     const book = HADITH_BOOKS.find(b => b.id === bookId);
     if (book) {
-      // Use the last word or main part of the book name for matching (e.g., "Bukhari", "Muslim", "Nasa'i")
-      const bookNameKey = book.name
-        .replace('Sahih ', '')
-        .replace('Sunan ', '')
-        .replace('Jami` at-', '')
-        .replace('Jami\' at-', '')
-        .split(' ')[0];
-      
-      setSelectedBook(bookNameKey);
+      // Map IDs to searchable source fragments
+      const sourceMap: Record<string, string> = {
+        'bukhari': 'Bukhari',
+        'muslim': 'Muslim',
+        'tirmidhi': 'Tirmidhi',
+        'abudawud': 'Abu Dawud',
+        'nasai': 'Nasa\'i',
+        'ibnmajah': 'Ibn Majah'
+      };
+      setSelectedBook(sourceMap[bookId] || book.name);
       setActiveTab('all');
       setSearch('');
       setActiveCategory(null);
+      setAiResult(null);
+    }
+  };
+
+  const handleAiResearch = async () => {
+    if (!search.trim()) return;
+    setIsAiSearching(true);
+    setAiResult(null);
+    try {
+      const result = await findHadith({ 
+        query: search, 
+        bookPreference: selectedBook || undefined 
+      });
+      if (result.found && result.hadith) {
+        setAiResult(result.hadith);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsAiSearching(false);
     }
   };
 
   const clearBookFilter = () => {
     setSelectedBook(null);
+    setAiResult(null);
   };
 
   if (!mounted) {
@@ -81,14 +108,31 @@ export default function HadithPage() {
         </TabsList>
 
         <TabsContent value="all" className="space-y-6 animate-in fade-in duration-500">
-          <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
-            <Input 
-              placeholder="Search by keyword, narrator, or grade..."
-              className="pl-10 h-14 rounded-2xl bg-card border-border/50 focus:ring-accent/20"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="space-y-4">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-accent transition-colors" />
+              <Input 
+                placeholder="Search local samples or ask AI researcher..."
+                className="pl-10 h-14 rounded-2xl bg-card border-border/50 focus:ring-accent/20"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            
+            {search.length > 2 && (
+              <Button 
+                onClick={handleAiResearch}
+                disabled={isAiSearching}
+                className="w-full rounded-2xl h-12 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 font-bold"
+              >
+                {isAiSearching ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Sparkles className="w-4 h-4 mr-2" />
+                )}
+                Ask AI Researcher for "{search}" in Canonical Books
+              </Button>
+            )}
           </div>
 
           <div className="space-y-3">
@@ -132,11 +176,52 @@ export default function HadithPage() {
           </div>
 
           {selectedBook && (
-            <div className="px-1">
+            <div className="px-1 flex items-center justify-between">
               <Badge variant="outline" className="rounded-full bg-accent/5 border-accent/20 text-accent font-bold py-1 px-4">
-                Showing: {selectedBook}
+                Collection: {selectedBook}
               </Badge>
+              <span className="text-[10px] text-muted-foreground italic">Showing local sample</span>
             </div>
+          )}
+
+          {/* AI Result Card */}
+          {aiResult && (
+             <div className="space-y-3 animate-in fade-in slide-in-from-top-4 duration-500">
+               <h3 className="text-xs font-bold text-primary uppercase tracking-[0.2em] ml-2 flex items-center">
+                 <Sparkles className="w-3 h-3 mr-2" />
+                 AI Research Result
+               </h3>
+               <Card className="rounded-[2.5rem] border-primary/30 overflow-hidden bg-primary/5 shadow-lg">
+                <CardContent className="p-8 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-primary text-primary-foreground text-[10px] uppercase font-bold">
+                      {aiResult.source}
+                    </Badge>
+                    <Badge variant="outline" className="border-primary/20 text-primary font-bold text-[10px]">
+                      {aiResult.grade}
+                    </Badge>
+                  </div>
+                  <div className="space-y-6">
+                    <p className="text-right text-3xl font-arabic leading-[4.5rem] text-primary">
+                      {aiResult.arabic}
+                    </p>
+                    <p className="text-lg leading-relaxed text-foreground font-medium italic border-l-4 border-primary/20 pl-6">
+                      "{aiResult.text}"
+                    </p>
+                    <div className="p-4 bg-white/50 rounded-2xl border border-primary/10 text-xs text-muted-foreground leading-relaxed">
+                      <div className="flex items-center gap-1 mb-1 font-bold text-primary">
+                        <Info className="w-3 h-3" /> Context
+                      </div>
+                      {aiResult.explanation}
+                    </div>
+                  </div>
+                  <div className="pt-6 border-t border-primary/10 flex items-center justify-between text-[10px]">
+                    <span className="font-bold uppercase tracking-widest text-muted-foreground">Narrated by {aiResult.narrator}</span>
+                    <span className="font-mono font-bold text-primary">{aiResult.reference}</span>
+                  </div>
+                </CardContent>
+              </Card>
+             </div>
           )}
 
           <div className="space-y-6">
@@ -192,10 +277,11 @@ export default function HadithPage() {
                   </div>
                 </CardContent>
               </Card>
-            )) : (
+            )) : !isAiSearching && !aiResult && (
               <div className="text-center py-20 opacity-30">
                 <BookOpen className="w-16 h-16 mx-auto mb-4" />
-                <p className="text-lg font-bold">No hadiths match your criteria.</p>
+                <p className="text-lg font-bold">No local matches found.</p>
+                <p className="text-sm mt-2">Try using the AI Researcher button above to search the full canon.</p>
                 <Button variant="link" onClick={() => { setSearch(''); setActiveCategory(null); setSelectedBook(null); }} className="mt-4">
                   Reset all filters
                 </Button>
