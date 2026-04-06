@@ -5,15 +5,16 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { getHijriDate, getDailyAyah, getRandomHadith } from '@/lib/islamic-data';
-import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen, Book } from 'lucide-react';
+import { getHijriDate, getDailyAyah, getRandomHadith, Hadith } from '@/lib/islamic-data';
+import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen, Book, ScrollText } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [hijriDate, setHijriDate] = useState('');
   const [ayah, setAyah] = useState<any>(null);
-  const [hadith, setHadith] = useState<any>(null);
+  const [hadith, setHadith] = useState<Hadith | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function Home() {
       <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
         {[
           { icon: Book, label: 'Quran', href: '/quran' },
+          { icon: ScrollText, label: 'Hadith', href: '/hadith' },
           { icon: Sparkles, label: 'AI Tools', href: '/explainer' },
           { icon: BookOpen, label: 'Duas', href: '/duas' },
           { icon: Hash, label: 'Tasbeeh', href: '/tasbeeh' },
@@ -78,7 +80,7 @@ export default function Home() {
         ].map((action) => (
           <Link key={action.label} href={action.href}>
             <Button variant="outline" className="h-12 rounded-full px-6 bg-card border-border/50 hover:bg-accent/10 hover:border-accent group">
-              <action.icon className="w-4 h-4 mr-2 text-accent group-hover:scale-110 transition-transform" />
+              <action.icon className={cn("w-4 h-4 mr-2 text-accent group-hover:scale-110 transition-transform", action.label === 'AI Tools' && "text-primary animate-pulse")} />
               <span className="font-semibold">{action.label}</span>
             </Button>
           </Link>
@@ -122,16 +124,37 @@ export default function Home() {
 
       {/* Daily Hadith */}
       <section className="space-y-3 pb-8">
-        <h2 className="text-lg font-headline font-bold px-1">Wisdom for Today</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-lg font-headline font-bold">Wisdom for Today</h2>
+          <Link href="/hadith" className="text-xs font-bold text-accent uppercase tracking-widest hover:underline">View All</Link>
+        </div>
         <Card className="rounded-[2rem] border-border/50 shadow-sm bg-[#F0F4F2] dark:bg-[#152B1E] border-none">
-          <CardContent className="p-8 space-y-4">
-            <p className="text-base leading-relaxed text-foreground font-medium">
+          <CardContent className="p-8 space-y-6">
+            <div className="flex items-center justify-between">
+               <Badge 
+                variant="outline" 
+                className={cn(
+                  "font-bold text-[10px] bg-white/50",
+                  hadith?.grade === 'Sahih' ? "border-green-500/30 text-green-600" : "border-accent/30 text-accent"
+                )}
+              >
+                {hadith?.grade} Authentication
+              </Badge>
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{hadith?.source}</span>
+            </div>
+            
+            <p className="text-base leading-relaxed text-foreground font-medium italic">
               "{hadith?.text}"
             </p>
-            <div className="flex items-center justify-between">
+            
+            <div className="flex items-center justify-between pt-2">
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-accent uppercase tracking-widest">{hadith?.source}</span>
-                <span className="text-xs text-muted-foreground">Narrated by {hadith?.narrator}</span>
+                <span className="text-[10px] text-muted-foreground uppercase">Narrator</span>
+                <span className="text-xs font-bold">{hadith?.narrator}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] text-muted-foreground uppercase">Ref</span>
+                <p className="text-xs font-mono text-accent">{hadith?.reference}</p>
               </div>
             </div>
           </CardContent>
