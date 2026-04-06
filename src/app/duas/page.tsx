@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Heart, ChevronRight, Moon, Sun, Plane, Utensils, ShieldCheck } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const DUAS = [
   { id: 1, category: "Morning", title: "Morning Adhkar", arabic: "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا", translation: "O Allah, by You we enter the morning and by You we enter the evening." },
