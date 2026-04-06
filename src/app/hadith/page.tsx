@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HADITHS, HADITH_BOOKS } from '@/lib/islamic-data';
 import { findHadith, FindHadithOutput } from '@/ai/flows/ai-hadith-finder';
@@ -100,6 +101,15 @@ export default function HadithPage() {
         <h1 className="text-3xl font-headline font-bold">Hadith Library</h1>
         <p className="text-muted-foreground">Words and actions of Prophet Muhammad (ﷺ).</p>
       </div>
+
+      {/* AI Tool Promotion Header */}
+      <Alert className="rounded-3xl border-primary/20 bg-primary/5 py-6">
+        <Sparkles className="h-5 w-5 text-primary" />
+        <AlertTitle className="text-primary font-bold font-headline mb-1">Access Full Canon with AI</AlertTitle>
+        <AlertDescription className="text-xs text-muted-foreground leading-relaxed">
+          While this library contains curated samples, you can search all 30,000+ canonical Hadiths. Just type a topic or reference below and use the <span className="font-bold text-primary">AI Researcher</span> button.
+        </AlertDescription>
+      </Alert>
 
       <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)}>
         <TabsList className="grid w-full grid-cols-2 rounded-2xl h-12 bg-muted/50 p-1 mb-6">
@@ -280,7 +290,7 @@ export default function HadithPage() {
             )) : !isAiSearching && !aiResult && (
               <div className="text-center py-20 opacity-30">
                 <BookOpen className="w-16 h-16 mx-auto mb-4" />
-                <p className="text-lg font-bold">No local matches found.</p>
+                <p className="text-lg font-bold">No hadiths match your criteria.</p>
                 <p className="text-sm mt-2">Try using the AI Researcher button above to search the full canon.</p>
                 <Button variant="link" onClick={() => { setSearch(''); setActiveCategory(null); setSelectedBook(null); }} className="mt-4">
                   Reset all filters
