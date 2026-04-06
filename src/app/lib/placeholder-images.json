@@ -1,0 +1,17 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "quran-reading",
+      "description": "Person reading Quran",
+      "imageUrl": "https://picsum.photos/seed/quran/800/600",
+      "imageHint": "quran reading"
+    },
+    {
+      "id": "mosque-interior",
+      "description": "Beautiful mosque architecture",
+      "imageUrl": "https://picsum.photos/seed/mosque/800/600",
+      "imageHint": "mosque interior"
+    }
+  ]
+}

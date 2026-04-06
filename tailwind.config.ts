@@ -1,3 +1,4 @@
+
 import type {Config} from 'tailwindcss';
 
 export default {
@@ -11,7 +12,8 @@ export default {
     extend: {
       fontFamily: {
         body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        headline: ['Lora', 'serif'],
+        arabic: ['Amiri', 'serif'],
         code: ['monospace'],
       },
       colors: {
@@ -88,10 +90,15 @@ export default {
             height: '0',
           },
         },
+        'pulse-gold': {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.8', transform: 'scale(1.02)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'pulse-gold': 'pulse-gold 2s infinite ease-in-out',
       },
     },
   },
