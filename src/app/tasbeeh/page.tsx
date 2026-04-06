@@ -4,8 +4,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { RotateCcw, Settings2, History as HistoryIcon } from 'lucide-react';
+import { RotateCcw, History as HistoryIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useFirestore, useUser, useMemoFirebase, useCollection } from '@/firebase';
+import { collection, serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 
 const DHIKRS = [
   { name: "Subhan Allah", target: 33 },
@@ -15,17 +18,22 @@ const DHIKRS = [
 ];
 
 export default function TasbeehPage() {
+  const { firestore } = useFirestore() || {};
+  const { user } = useUser();
   const [count, setCount] = useState(0);
   const [target, setTarget] = useState(33);
   const [selectedDhikr, setSelectedDhikr] = useState(DHIKRS[0]);
-  const [history, setHistory] = useState<number[]>([]);
+  const [sessionStartTime, setSessionStartTime] = useState<Date>(new Date());
 
-  useEffect(() => {
-    const saved = localStorage.getItem('tasbeeh-history');
-    if (saved) setHistory(JSON.parse(saved));
-  }, []);
+  const sessionsQuery = useMemoFirebase(() => {
+    if (!firestore || !user) return null;
+    return collection(firestore, 'users', user.uid, 'dhikrSessions');
+  }, [firestore, user]);
+
+  const { data: sessions } = useCollection(sessionsQuery);
 
   const handleTap = useCallback(() => {
+    if (count === 0) setSessionStartTime(new Date());
     setCount(prev => {
       const next = prev + 1;
       if (typeof window !== 'undefined' && window.navigator.vibrate) {
@@ -33,16 +41,31 @@ export default function TasbeehPage() {
       }
       return next;
     });
-  }, []);
+  }, [count]);
+
+  const saveSession = useCallback(() => {
+    if (count > 0 && firestore && user) {
+      const sessionData = {
+        userId: user.uid,
+        dhikrPhrase: selectedDhikr.name,
+        targetCount: target,
+        actualCount: count,
+        sessionDate: new Date().toISOString().split('T')[0],
+        startTime: sessionStartTime.toISOString(),
+        endTime: new Date().toISOString(),
+        isCompleted: count >= target,
+        createdAt: serverTimestamp(),
+      };
+      
+      const colRef = collection(firestore, 'users', user.uid, 'dhikrSessions');
+      addDocumentNonBlocking(colRef, sessionData);
+    }
+  }, [count, firestore, user, selectedDhikr, target, sessionStartTime]);
 
   const reset = useCallback(() => {
-    if (count > 0) {
-      const newHistory = [count, ...history].slice(0, 10);
-      setHistory(newHistory);
-      localStorage.setItem('tasbeeh-history', JSON.stringify(newHistory));
-    }
+    saveSession();
     setCount(0);
-  }, [count, history]);
+  }, [saveSession]);
 
   const progress = (count / target) * 100;
   const strokeDasharray = 2 * Math.PI * 135;
@@ -62,6 +85,7 @@ export default function TasbeehPage() {
             variant={selectedDhikr.name === d.name ? "default" : "outline"}
             className="rounded-full h-10 px-6 whitespace-nowrap"
             onClick={() => {
+              saveSession();
               setSelectedDhikr(d);
               setTarget(d.target);
               setCount(0);
@@ -76,7 +100,6 @@ export default function TasbeehPage() {
         className="relative w-[300px] h-[300px] flex items-center justify-center cursor-pointer group select-none active:scale-95 transition-transform"
         onClick={handleTap}
       >
-        {/* Progress Ring */}
         <svg className="absolute inset-0 w-full h-full -rotate-90">
           <circle
             cx="150"
@@ -99,7 +122,6 @@ export default function TasbeehPage() {
           />
         </svg>
 
-        {/* Counter Center */}
         <div className="relative z-10 flex flex-col items-center">
           <span className="text-7xl font-headline font-bold text-primary">{count}</span>
           <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest mt-2">
@@ -113,31 +135,26 @@ export default function TasbeehPage() {
           </div>
         </div>
         
-        {/* Decorative Tap Indicator */}
         <div className="absolute inset-0 rounded-full bg-accent/5 group-active:bg-accent/20 transition-colors" />
       </div>
 
       <div className="flex gap-4 w-full max-w-[300px]">
         <Button variant="outline" className="flex-1 rounded-2xl h-14" onClick={reset}>
           <RotateCcw className="w-5 h-5 mr-2" />
-          Reset
-        </Button>
-        <Button variant="outline" size="icon" className="rounded-2xl h-14 w-14">
-          <HistoryIcon className="w-5 h-5" />
+          Reset & Save
         </Button>
       </div>
 
-      {/* History Preview */}
-      {history.length > 0 && (
-        <div className="w-full space-y-3">
+      {sessions && sessions.length > 0 && (
+        <div className="w-full space-y-3 pb-24">
           <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center">
             <HistoryIcon className="w-4 h-4 mr-2" />
             Recent Sessions
           </h3>
           <div className="grid grid-cols-5 gap-2">
-            {history.map((h, i) => (
-              <div key={i} className="aspect-square rounded-xl bg-card border flex items-center justify-center text-xs font-bold text-muted-foreground">
-                {h}
+            {sessions.slice(0, 10).map((s, i) => (
+              <div key={s.id} className="aspect-square rounded-xl bg-card border flex items-center justify-center text-xs font-bold text-primary">
+                {s.actualCount}
               </div>
             ))}
           </div>

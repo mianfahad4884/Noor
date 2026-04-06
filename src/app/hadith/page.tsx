@@ -15,6 +15,7 @@ export default function HadithPage() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'books'>('all');
+  const [selectedBook, setSelectedBook] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -22,13 +23,31 @@ export default function HadithPage() {
 
   const categories = Array.from(new Set(HADITHS.map(h => h.category)));
 
-  const filteredHadiths = HADITHS.filter(h => 
-    (activeCategory ? h.category === activeCategory : true) &&
-    (h.text.toLowerCase().includes(search.toLowerCase()) || 
-     h.narrator.toLowerCase().includes(search.toLowerCase()) ||
-     h.source.toLowerCase().includes(search.toLowerCase()) ||
-     h.category.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredHadiths = HADITHS.filter(h => {
+    const matchesCategory = activeCategory ? h.category === activeCategory : true;
+    const matchesBook = selectedBook ? h.source.toLowerCase().includes(selectedBook.toLowerCase()) : true;
+    const matchesSearch = 
+      h.text.toLowerCase().includes(search.toLowerCase()) || 
+      h.narrator.toLowerCase().includes(search.toLowerCase()) ||
+      h.source.toLowerCase().includes(search.toLowerCase()) ||
+      h.category.toLowerCase().includes(search.toLowerCase());
+    
+    return matchesCategory && matchesBook && matchesSearch;
+  });
+
+  const handleBrowseBook = (bookId: string) => {
+    const book = HADITH_BOOKS.find(b => b.id === bookId);
+    if (book) {
+      setSelectedBook(book.name.replace('Sahih ', '').replace('Sunan ', ''));
+      setActiveTab('all');
+      setSearch('');
+      setActiveCategory(null);
+    }
+  };
+
+  const clearBookFilter = () => {
+    setSelectedBook(null);
+  };
 
   if (!mounted) {
     return <div className="min-h-screen bg-background" />;
@@ -41,7 +60,7 @@ export default function HadithPage() {
         <p className="text-muted-foreground">Words and actions of Prophet Muhammad (ﷺ).</p>
       </div>
 
-      <Tabs defaultValue="all" onValueChange={(v: any) => setActiveTab(v)}>
+      <Tabs value={activeTab} onValueChange={(v: any) => setActiveTab(v)}>
         <TabsList className="grid w-full grid-cols-2 rounded-2xl h-12 bg-muted/50 p-1 mb-6">
           <TabsTrigger value="all" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">All Hadiths</TabsTrigger>
           <TabsTrigger value="books" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Collections</TabsTrigger>
@@ -59,9 +78,19 @@ export default function HadithPage() {
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest px-1">
-              <Filter className="w-3 h-3" />
-              Quick Categories
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                <Filter className="w-3 h-3" />
+                Filters
+              </div>
+              {selectedBook && (
+                <button 
+                  onClick={clearBookFilter}
+                  className="text-[10px] font-bold text-primary underline uppercase tracking-widest"
+                >
+                  Clear Book: {selectedBook}
+                </button>
+              )}
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
               <button
@@ -71,7 +100,7 @@ export default function HadithPage() {
                   activeCategory === null ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-card text-muted-foreground border-border/50 hover:bg-accent/10"
                 )}
               >
-                All
+                All Categories
               </button>
               {categories.map((cat) => (
                 <button
@@ -89,7 +118,7 @@ export default function HadithPage() {
           </div>
 
           <div className="space-y-6">
-            {filteredHadiths.map((hadith) => (
+            {filteredHadiths.length > 0 ? filteredHadiths.map((hadith) => (
               <Card key={hadith.id} className="rounded-[2.5rem] border-border/30 overflow-hidden bg-card shadow-sm hover:shadow-md transition-shadow group">
                 <CardContent className="p-8 space-y-6">
                   <div className="flex items-center justify-between">
@@ -141,14 +170,23 @@ export default function HadithPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            )) : (
+              <div className="text-center py-20 opacity-30">
+                <BookOpen className="w-16 h-16 mx-auto mb-4" />
+                <p className="text-lg font-bold">No hadiths match your criteria.</p>
+              </div>
+            )}
           </div>
         </TabsContent>
 
         <TabsContent value="books" className="animate-in fade-in duration-500">
           <div className="grid gap-4">
             {HADITH_BOOKS.map((book) => (
-              <Card key={book.id} className="rounded-[2rem] border-border/50 hover:border-accent transition-all group cursor-pointer bg-card overflow-hidden">
+              <Card 
+                key={book.id} 
+                className="rounded-[2rem] border-border/50 hover:border-accent transition-all group cursor-pointer bg-card overflow-hidden"
+                onClick={() => handleBrowseBook(book.id)}
+              >
                 <CardContent className="p-0">
                   <div className="flex h-full">
                     <div className="w-24 bg-primary/5 flex items-center justify-center border-r border-border/50">
