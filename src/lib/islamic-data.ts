@@ -21,9 +21,12 @@ export async function getSurahList() {
   }
 }
 
-export async function getSurahDetail(surahNumber: number, edition: string = 'en.sahih') {
+export async function getSurahDetail(surahNumber: number, edition: string = 'en.sahih', tafseerEdition: string | null = null) {
   try {
-    const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/quran-uthmani,${edition}`);
+    const editions = ['quran-uthmani', edition];
+    if (tafseerEdition) editions.push(tafseerEdition);
+    
+    const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/${editions.join(',')}`);
     const data = await response.json();
     return data.data;
   } catch (error) {
@@ -50,6 +53,15 @@ export interface Hadith {
   grade: 'Sahih' | 'Hasan' | 'Da\'if';
   category: string;
 }
+
+export const HADITH_BOOKS = [
+  { id: 'bukhari', name: 'Sahih al-Bukhari', author: 'Imam Bukhari', count: '7,563' },
+  { id: 'muslim', name: 'Sahih Muslim', author: 'Imam Muslim', count: '3,033' },
+  { id: 'tirmidhi', name: 'Jami` at-Tirmidhi', author: 'Imam Tirmidhi', count: '3,956' },
+  { id: 'abudawud', name: 'Sunan Abi Dawud', author: 'Imam Abu Dawud', count: '5,274' },
+  { id: 'nasai', name: 'Sunan an-Nasa\'i', author: 'Imam an-Nasa\'i', count: '5,758' },
+  { id: 'ibnmajah', name: 'Sunan Ibn Majah', author: 'Imam Ibn Majah', count: '4,341' },
+];
 
 export const HADITHS: Hadith[] = [
   {
@@ -189,4 +201,10 @@ export const QURAN_EDITIONS = [
   { id: 'fr.hamidullah', name: 'French (Hamidullah)', flag: '🇫🇷' },
   { id: 'ru.kuliev', name: 'Russian (Kuliev)', flag: '🇷🇺' },
   { id: 'uz.sodik', name: 'Uzbek (Sodik)', flag: '🇺🇿' },
+];
+
+export const QURAN_TAFSEERS = [
+  { id: 'en.ibnkathir', name: 'Ibn Kathir (English)', author: 'Ibn Kathir' },
+  { id: 'ar.jalalayn', name: 'Jalalayn (Arabic)', author: 'Al-Siyuti & Al-Mahalli' },
+  { id: 'ar.muyassar', name: 'Al-Muyassar (Arabic)', author: 'Various' },
 ];

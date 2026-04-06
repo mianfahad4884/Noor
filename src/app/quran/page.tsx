@@ -2,13 +2,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, BookOpen, ChevronLeft, Loader2, Languages, Hash } from 'lucide-react';
-import { getSurahList, getSurahDetail, QURAN_EDITIONS } from '@/lib/islamic-data';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, ChevronLeft, Loader2, Languages, BookOpen, Info } from 'lucide-react';
+import { getSurahList, getSurahDetail, QURAN_EDITIONS, QURAN_TAFSEERS } from '@/lib/islamic-data';
 
 export default function QuranPage() {
   const [mounted, setMounted] = useState(false);
@@ -20,6 +21,8 @@ export default function QuranPage() {
   const [loading, setLoading] = useState(true);
   const [contentLoading, setContentLoading] = useState(false);
   const [edition, setEdition] = useState('en.sahih');
+  const [tafseerEdition, setTafseerEdition] = useState('en.ibnkathir');
+  const [viewMode, setViewMode] = useState<'translation' | 'tafseer'>('translation');
 
   useEffect(() => {
     setMounted(true);
@@ -42,20 +45,20 @@ export default function QuranPage() {
 
   useEffect(() => {
     if (selectedSurah) {
-      loadSurah(selectedSurah.number, edition);
+      loadSurah(selectedSurah.number, edition, viewMode === 'tafseer' ? tafseerEdition : null);
     }
-  }, [edition]);
+  }, [edition, tafseerEdition, viewMode]);
 
-  async function loadSurah(number: number, currentEdition: string) {
+  async function loadSurah(number: number, currentEdition: string, currentTafseer: string | null) {
     setContentLoading(true);
-    const data = await getSurahDetail(number, currentEdition);
+    const data = await getSurahDetail(number, currentEdition, currentTafseer);
     setSurahContent(data);
     setContentLoading(false);
   }
 
   function handleSurahClick(surah: any) {
     setSelectedSurah(surah);
-    loadSurah(surah.number, edition);
+    loadSurah(surah.number, edition, viewMode === 'tafseer' ? tafseerEdition : null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -67,7 +70,7 @@ export default function QuranPage() {
         <div className="space-y-6 pt-12 px-6">
           <div className="space-y-2">
             <h1 className="text-3xl font-headline font-bold">The Noble Quran</h1>
-            <p className="text-muted-foreground">Read and explore the divine words.</p>
+            <p className="text-muted-foreground">Read and explore divine wisdom with Tafseer.</p>
           </div>
 
           <div className="relative">
@@ -124,60 +127,94 @@ export default function QuranPage() {
             </Button>
             <div className="flex-1">
               <h2 className="text-lg font-headline font-bold">{selectedSurah.englishName}</h2>
-              <p className="text-xs text-muted-foreground">{selectedSurah.englishNameTranslation} • {selectedSurah.revelationType}</p>
+              <p className="text-xs text-muted-foreground">{selectedSurah.revelationType} • {selectedSurah.numberOfAyahs} Ayahs</p>
             </div>
-            <Select value={edition} onValueChange={setEdition}>
-              <SelectTrigger className="w-fit border-none shadow-none bg-transparent h-fit p-0 hover:text-accent">
-                <Languages className="w-5 h-5" />
-              </SelectTrigger>
-              <SelectContent>
-                {QURAN_EDITIONS.map(ed => (
-                  <SelectItem key={ed.id} value={ed.id}>
-                    <span className="mr-2">{ed.flag}</span> {ed.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            
+            <div className="flex items-center gap-2">
+              <Select value={edition} onValueChange={setEdition}>
+                <SelectTrigger className="w-fit border-none shadow-none bg-transparent h-fit p-0 hover:text-accent">
+                  <Languages className="w-5 h-5" />
+                </SelectTrigger>
+                <SelectContent>
+                  {QURAN_EDITIONS.map(ed => (
+                    <SelectItem key={ed.id} value={ed.id}>
+                      <span className="mr-2">{ed.flag}</span> {ed.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="px-6 space-y-6 pb-12">
-            {contentLoading || !surahContent ? (
-              <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <Loader2 className="w-8 h-8 animate-spin text-accent" />
-                <p className="text-sm text-muted-foreground">Loading Ayahs...</p>
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {selectedSurah.number !== 1 && selectedSurah.number !== 9 && (
-                   <div className="text-center py-8">
-                      <p className="text-3xl font-arabic text-primary">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
-                   </div>
+            <Tabs defaultValue="translation" className="w-full" onValueChange={(v: any) => setViewMode(v)}>
+              <TabsList className="grid w-full grid-cols-2 rounded-2xl h-12 bg-muted/50 p-1">
+                <TabsTrigger value="translation" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Translation</TabsTrigger>
+                <TabsTrigger value="tafseer" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Tafseer</TabsTrigger>
+              </TabsList>
+
+              <div className="mt-6">
+                {viewMode === 'tafseer' && (
+                  <div className="mb-6">
+                    <Select value={tafseerEdition} onValueChange={setTafseerEdition}>
+                      <SelectTrigger className="h-10 rounded-xl bg-card">
+                        <SelectValue placeholder="Select Tafseer" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {QURAN_TAFSEERS.map(t => (
+                          <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 )}
-                
-                {surahContent[0].ayahs.map((ayah: any, index: number) => {
-                  const translationAyah = surahContent[1].ayahs[index];
-                  return (
-                    <div key={ayah.number} className="space-y-4 group">
-                      <div className="flex items-start justify-between gap-4">
-                        <Badge variant="outline" className="rounded-lg h-7 border-border/50 text-[10px] font-bold text-muted-foreground bg-card">
-                          {ayah.numberInSurah}
-                        </Badge>
-                        <div className="flex-1">
-                           <p className="text-right text-3xl font-arabic leading-[4rem] text-primary tracking-wide">
-                            {ayah.text}
-                          </p>
+
+                {contentLoading || !surahContent ? (
+                  <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                    <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                    <p className="text-sm text-muted-foreground">Loading divine words...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-12">
+                    {selectedSurah.number !== 1 && selectedSurah.number !== 9 && (
+                       <div className="text-center py-8">
+                          <p className="text-3xl font-arabic text-primary">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                       </div>
+                    )}
+                    
+                    {surahContent[0].ayahs.map((ayah: any, index: number) => {
+                      const secondaryAyah = surahContent[viewMode === 'translation' ? 1 : 2]?.ayahs[index];
+                      return (
+                        <div key={ayah.number} className="space-y-6 group animate-in fade-in duration-500">
+                          <div className="flex items-start justify-between gap-4">
+                            <Badge variant="outline" className="rounded-lg h-7 border-border/50 text-[10px] font-bold text-muted-foreground bg-card">
+                              {ayah.numberInSurah}
+                            </Badge>
+                            <div className="flex-1">
+                               <p className="text-right text-3xl font-arabic leading-[4.5rem] text-primary tracking-wide">
+                                {ayah.text}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <Card className="rounded-[2rem] border-none bg-accent/5 dark:bg-accent/10 p-6 shadow-sm">
+                            <div className="flex items-center gap-2 mb-3">
+                               {viewMode === 'tafseer' ? <Info className="w-4 h-4 text-accent" /> : <BookOpen className="w-4 h-4 text-primary" />}
+                               <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                                 {viewMode === 'tafseer' ? `Tafseer ${QURAN_TAFSEERS.find(t => t.id === tafseerEdition)?.author}` : 'Translation'}
+                               </span>
+                            </div>
+                            <p className="text-sm text-foreground/90 leading-relaxed italic">
+                              {secondaryAyah?.text || "Tafseer loading..."}
+                            </p>
+                          </Card>
                         </div>
-                      </div>
-                      <div className="pl-12">
-                        <p className="text-sm text-foreground/80 leading-relaxed italic border-l-2 border-accent/20 pl-4">
-                          {translationAyah.text}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )}
+            </Tabs>
           </div>
         </div>
       )}
