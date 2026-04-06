@@ -64,11 +64,12 @@ export const HADITH_BOOKS = [
 ];
 
 export const HADITHS: Hadith[] = [
+  // Sahih al-Bukhari
   {
     id: 1,
     text: "Actions are judged by intentions, and every person will get what they intended.",
     arabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى",
-    source: "Sahih Bukhari",
+    source: "Sahih al-Bukhari",
     narrator: "Umar bin Al-Khattab",
     reference: "Book 1, Hadith 1",
     grade: "Sahih",
@@ -78,7 +79,7 @@ export const HADITHS: Hadith[] = [
     id: 2,
     text: "The best among you are those who have the best manners and character.",
     arabic: "خِيَارُكُمْ أَحْسَنُكُمْ أَخْلاَقًا",
-    source: "Sahih Bukhari",
+    source: "Sahih al-Bukhari",
     narrator: "Abdullah ibn Amr",
     reference: "Book 78, Hadith 61",
     grade: "Sahih",
@@ -88,12 +89,13 @@ export const HADITHS: Hadith[] = [
     id: 3,
     text: "None of you truly believes until he loves for his brother what he loves for himself.",
     arabic: "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
-    source: "Sahih Bukhari",
+    source: "Sahih al-Bukhari",
     narrator: "Anas bin Malik",
-    reference: "Book 2, Hadith 6",
+    reference: "Book 2, Hadith 13",
     grade: "Sahih",
     category: "Faith"
   },
+  // Sahih Muslim
   {
     id: 4,
     text: "Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
@@ -110,7 +112,7 @@ export const HADITHS: Hadith[] = [
     arabic: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
     source: "Sahih Muslim",
     narrator: "Abu Hurairah",
-    reference: "Book 35, Hadith 48",
+    reference: "Book 35, Hadith 6853",
     grade: "Sahih",
     category: "Knowledge"
   },
@@ -120,22 +122,13 @@ export const HADITHS: Hadith[] = [
     arabic: "الطَّهُورُ شَطْرُ الإِيمَانِ",
     source: "Sahih Muslim",
     narrator: "Abu Malik al-Ash'ari",
-    reference: "Book 2, Hadith 1",
+    reference: "Book 2, Hadith 432",
     grade: "Sahih",
     category: "Purity"
   },
+  // Sunan Abi Dawud
   {
     id: 7,
-    text: "Religion is easy, and no one overburdens himself in religion except that it will overcome him. So be moderate and follow the middle path.",
-    arabic: "إِنَّ الدِّينَ يُسْرٌ ، وَلَنْ يُشَادَّ الدِّينَ أَحَدٌ إِلاَّ غَلَبَهُ ، فَسَدِّدُوا وَقَارِبُوا",
-    source: "Sahih Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Book 2, Hadith 32",
-    grade: "Sahih",
-    category: "Moderation"
-  },
-  {
-    id: 8,
     text: "The merciful will be shown mercy by the Most Merciful. Be merciful to those on the earth and the One in the heavens will have mercy upon you.",
     arabic: "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ ارْحَمُوا مَنْ فِي الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
     source: "Sunan Abi Dawud",
@@ -145,102 +138,85 @@ export const HADITHS: Hadith[] = [
     category: "Mercy"
   },
   {
-    id: 9,
-    text: "The strongest among you is not the one who can wrestle, but the one who can control his anger.",
-    arabic: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
-    source: "Sahih Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Book 78, Hadith 141",
+    id: 8,
+    text: "The best of your days is Friday. On that day Adam was created and on that day he died.",
+    arabic: "مِنْ أَفْضَلِ أَيَّامِكُمْ يَوْمَ الْجُمُعَةِ فِيهِ خُلِقَ آدَمُ وَفِيهِ قُبِضَ",
+    source: "Sunan Abi Dawud",
+    narrator: "Aws ibn Aws",
+    reference: "Hadith 1047",
     grade: "Sahih",
+    category: "Worship"
+  },
+  // Jami` at-Tirmidhi
+  {
+    id: 9,
+    text: "Fear Allah wherever you are, follow up a bad deed with a good deed and it will wipe it out, and behave well towards people.",
+    arabic: "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
+    source: "Jami` at-Tirmidhi",
+    narrator: "Abu Dharr",
+    reference: "Hadith 1987",
+    grade: "Hasan",
     category: "Character"
   },
   {
     id: 10,
+    text: "He who does not show mercy to our young ones or recognize the rights of our elders is not one of us.",
+    arabic: "لَيْسَ مِنَّا مَنْ لَمْ يَرْحَمْ صَغِيرَنَا وَيَعْرِفْ شَرَفَ كَبِيرَنَا",
+    source: "Jami` at-Tirmidhi",
+    narrator: "Abdullah ibn Amr",
+    reference: "Hadith 1920",
+    grade: "Sahih",
+    category: "Social"
+  },
+  // Sunan an-Nasa'i
+  {
+    id: 11,
+    text: "Islam is built on five: Testifying that there is no god but Allah and Muhammad is the Messenger of Allah...",
+    arabic: "بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ شَهَادَةِ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَأَنَّ مُحَمَّدًا رَسُولُ اللَّهِ",
+    source: "Sunan an-Nasa'i",
+    narrator: "Ibn Umar",
+    reference: "Hadith 5001",
+    grade: "Sahih",
+    category: "Faith"
+  },
+  {
+    id: 12,
+    text: "The prayer of one who is in a state of impurity is not accepted until he performs ablution.",
+    arabic: "لَا تُقْبَلُ صَلَاةٌ بِغَيْرِ طُهُورٍ",
+    source: "Sunan an-Nasa'i",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 139",
+    grade: "Sahih",
+    category: "Purity"
+  },
+  // Sunan Ibn Majah
+  {
+    id: 13,
+    text: "Seeking knowledge is an obligation upon every Muslim.",
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Hadith 224",
+    grade: "Sahih",
+    category: "Knowledge"
+  },
+  {
+    id: 14,
+    text: "Two characteristics are never found together in a believer: Misery and bad manners.",
+    arabic: "خَصْلَتَانِ لَا تَجْتَمِعَانِ فِي مُؤْمِنٍ الْبُخْلُ وَسُوءُ الْخُلُقِ",
+    source: "Sunan Ibn Majah",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 3979",
+    grade: "Hasan",
+    category: "Character"
+  },
+  {
+    id: 15,
     text: "Allah is Beautiful and He loves beauty.",
     arabic: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
     source: "Sahih Muslim",
     narrator: "Abdullah ibn Mas'ud",
     reference: "Book 1, Hadith 172",
-    grade: "Sahih",
-    category: "Spirituality"
-  },
-  {
-    id: 11,
-    text: "The most beloved of people to Allah is the one who brings most benefit to people.",
-    arabic: "أَحَبُّ النَّاسِ إِلَى اللَّهِ أَنْفَعُهُمْ لِلنَّاسِ",
-    source: "Jami` at-Tirmidhi",
-    narrator: "Ibn Umar",
-    reference: "Hadith 1565",
-    grade: "Hasan",
-    category: "Social"
-  },
-  {
-    id: 12,
-    text: "Modesty is part of faith.",
-    arabic: "الْحَيَاءُ مِنَ الإِيمَانِ",
-    source: "Sahih Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Book 2, Hadith 2",
-    grade: "Sahih",
-    category: "Character"
-  },
-  {
-    id: 13,
-    text: "Take advantage of five before five: your youth before your old age, your health before your sickness, your wealth before your poverty, your free time before your busy-ness, and your life before your death.",
-    arabic: "اغْتَنِمْ خَمْسًا قَبْلَ خَمْسٍ",
-    source: "Sunan an-Nasa'i",
-    narrator: "Ibn Abbas",
-    reference: "Hadith 586",
-    grade: "Sahih",
-    category: "Spirituality"
-  },
-  {
-    id: 14,
-    text: "Seeking knowledge is an obligation upon every Muslim.",
-    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Book 1, Hadith 224",
-    grade: "Sahih",
-    category: "Knowledge"
-  },
-  {
-    id: 15,
-    text: "The world is a prison for the believer and a paradise for the disbeliever.",
-    arabic: "الدُّنْيَا سِجْنُ الْمُؤْمِنِ وَجَنَّةُ الْكَافِرِ",
-    source: "Sahih Muslim",
-    narrator: "Abu Hurairah",
-    reference: "Book 42, Hadith 7058",
-    grade: "Sahih",
-    category: "Spirituality"
-  },
-  {
-    id: 16,
-    text: "The sign of a person's being a good Muslim is that he should leave alone that which does not concern him.",
-    arabic: "مِنْ حُسْنِ إِسْلاَمِ الْمَرْءِ تَرْكُهُ مَا لاَ يَعْنِيهِ",
-    source: "Sunan Tirmidhi",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 2317",
-    grade: "Hasan",
-    category: "Character"
-  },
-  {
-    id: 17,
-    text: "A kind word is a form of charity.",
-    arabic: "الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ",
-    source: "Sahih Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Book 56, Hadith 101",
-    grade: "Sahih",
-    category: "Character"
-  },
-  {
-    id: 18,
-    text: "Richness is not having many possessions, but richness is being content with oneself.",
-    arabic: "لَيْسَ الْغِنَى عَنْ كَثْرَةِ الْعَرَضِ، وَلَكِنَّ الْغِنَى غِنَى النَّفْسِ",
-    source: "Sahih Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Book 81, Hadith 35",
     grade: "Sahih",
     category: "Spirituality"
   }
