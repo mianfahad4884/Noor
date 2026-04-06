@@ -1,0 +1,589 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Stores user's personal profile information and application settings.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "avatarInitials": {
+          "type": "string",
+          "description": "Initials for the user's avatar, usually derived from their name or explicitly set."
+        },
+        "streakCounter": {
+          "type": "number",
+          "description": "Counts consecutive days of meeting a specific app-related goal (e.g., daily usage or prayer completion)."
+        },
+        "darkModeEnabled": {
+          "type": "boolean",
+          "description": "Indicates whether dark mode is enabled for the user's interface."
+        },
+        "fontSizePreference": {
+          "type": "string",
+          "description": "The preferred font size setting for the application (e.g., 'small', 'medium', 'large')."
+        },
+        "languagePreference": {
+          "type": "string",
+          "description": "The preferred language for the application's UI and content (e.g., 'en' for English, 'ar' for Arabic)."
+        },
+        "quranTranslationLanguage": {
+          "type": "string",
+          "description": "The preferred language for Quranic verse translations (e.g., 'en_sahih')."
+        },
+        "hadithCollectionPreference": {
+          "type": "string",
+          "description": "The preferred Hadith collection to display (e.g., 'bukhari', 'muslim', 'all')."
+        },
+        "dailyAyahNotificationTime": {
+          "type": "string",
+          "description": "The time of day for receiving daily Ayah notifications, in HH:mm format.",
+          "format": "time"
+        },
+        "morningAdhkarReminderEnabled": {
+          "type": "boolean",
+          "description": "Indicates if morning Adhkar reminders are enabled."
+        },
+        "eveningAdhkarReminderEnabled": {
+          "type": "boolean",
+          "description": "Indicates if evening Adhkar reminders are enabled."
+        },
+        "fajrNotificationEnabled": {
+          "type": "boolean",
+          "description": "Indicates if notifications for Fajr prayer time are enabled."
+        },
+        "dhuhrNotificationEnabled": {
+          "type": "boolean",
+          "description": "Indicates if notifications for Dhuhr prayer time are enabled."
+        },
+        "asrNotificationEnabled": {
+          "type": "boolean",
+          "description": "Indicates if notifications for Asr prayer time are enabled."
+        },
+        "maghribNotificationEnabled": {
+          "type": "boolean",
+          "description": "Indicates if notifications for Maghrib prayer time are enabled."
+        },
+        "ishaNotificationEnabled": {
+          "type": "boolean",
+          "description": "Indicates if notifications for Isha prayer time are enabled."
+        },
+        "lastActiveDate": {
+          "type": "string",
+          "description": "The date of the user's last activity, used for streak calculation.",
+          "format": "date"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "avatarInitials",
+        "streakCounter",
+        "darkModeEnabled",
+        "fontSizePreference",
+        "languagePreference",
+        "quranTranslationLanguage",
+        "hadithCollectionPreference",
+        "dailyAyahNotificationTime",
+        "morningAdhkarReminderEnabled",
+        "eveningAdhkarReminderEnabled",
+        "fajrNotificationEnabled",
+        "dhuhrNotificationEnabled",
+        "asrNotificationEnabled",
+        "maghribNotificationEnabled",
+        "ishaNotificationEnabled",
+        "createdAt"
+      ]
+    },
+    "Dua": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Dua",
+      "type": "object",
+      "description": "Represents a single supplication (Dua) from the bundled library.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Dua entity."
+        },
+        "arabicText": {
+          "type": "string",
+          "description": "The Dua text in Arabic."
+        },
+        "transliteration": {
+          "type": "string",
+          "description": "The phonetic transliteration of the Arabic Dua text."
+        },
+        "translation": {
+          "type": "string",
+          "description": "The English translation of the Dua text."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category to which the Dua belongs (e.g., 'Morning Adhkar', 'Travel Duas')."
+        },
+        "source": {
+          "type": "string",
+          "description": "The source book or collection from which the Dua is derived (optional)."
+        },
+        "reference": {
+          "type": "string",
+          "description": "Specific reference or chapter within the source (optional)."
+        }
+      },
+      "required": [
+        "id",
+        "arabicText",
+        "transliteration",
+        "translation",
+        "category"
+      ]
+    },
+    "UserDuaBookmark": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserDuaBookmark",
+      "type": "object",
+      "description": "Records a user's bookmarked Duas.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserDuaBookmark entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the UserProfile who bookmarked the Dua. (Relationship: UserProfile 1:N UserDuaBookmark)"
+        },
+        "duaId": {
+          "type": "string",
+          "description": "Reference to the Dua that was bookmarked. (Relationship: Dua 1:N UserDuaBookmark)"
+        },
+        "bookmarkedAt": {
+          "type": "string",
+          "description": "Timestamp when the Dua was bookmarked.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "duaId",
+        "bookmarkedAt"
+      ]
+    },
+    "DhikrSession": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DhikrSession",
+      "type": "object",
+      "description": "Records details of a single tasbeeh (dhikr) counting session.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DhikrSession entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the UserProfile who performed the dhikr. (Relationship: UserProfile 1:N DhikrSession)"
+        },
+        "dhikrPhrase": {
+          "type": "string",
+          "description": "The specific dhikr phrase counted (e.g., 'SubhanAllah', 'Alhamdulillah', or a custom phrase)."
+        },
+        "targetCount": {
+          "type": "number",
+          "description": "The target number of repetitions for the dhikr session (e.g., 33, 99)."
+        },
+        "actualCount": {
+          "type": "number",
+          "description": "The actual number of repetitions achieved in the session."
+        },
+        "sessionDate": {
+          "type": "string",
+          "description": "The date on which the dhikr session took place.",
+          "format": "date"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "The start time of the dhikr session.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "The end time of the dhikr session.",
+          "format": "date-time"
+        },
+        "isCompleted": {
+          "type": "boolean",
+          "description": "Indicates whether the target count for the session was met or exceeded."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "dhikrPhrase",
+        "targetCount",
+        "actualCount",
+        "sessionDate",
+        "startTime",
+        "endTime",
+        "isCompleted"
+      ]
+    },
+    "PrayerTime": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PrayerTime",
+      "type": "object",
+      "description": "Caches prayer times and Qibla direction for a specific location and date.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PrayerTime entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the UserProfile for whom these prayer times are relevant (due to personalized calculation settings). (Relationship: UserProfile 1:N PrayerTime)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The calendar date for which these prayer times apply.",
+          "format": "date"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "The latitude of the location for which prayer times were calculated."
+        },
+        "longitude": {
+          "type": "number",
+          "description": "The longitude of the location for which prayer times were calculated."
+        },
+        "fajr": {
+          "type": "string",
+          "description": "The time for Fajr prayer.",
+          "format": "date-time"
+        },
+        "dhuhr": {
+          "type": "string",
+          "description": "The time for Dhuhr prayer.",
+          "format": "date-time"
+        },
+        "asr": {
+          "type": "string",
+          "description": "The time for Asr prayer.",
+          "format": "date-time"
+        },
+        "maghrib": {
+          "type": "string",
+          "description": "The time for Maghrib prayer.",
+          "format": "date-time"
+        },
+        "isha": {
+          "type": "string",
+          "description": "The time for Isha prayer.",
+          "format": "date-time"
+        },
+        "sunrise": {
+          "type": "string",
+          "description": "The time for Sunrise.",
+          "format": "date-time"
+        },
+        "qiblaDirection": {
+          "type": "number",
+          "description": "The Qibla direction (angle in degrees) from the given location."
+        },
+        "calculationMethod": {
+          "type": "string",
+          "description": "The calculation method used for these prayer times (e.g., 'MWL', 'ISNA')."
+        },
+        "cachedAt": {
+          "type": "string",
+          "description": "Timestamp when these prayer times were fetched and cached.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "date",
+        "latitude",
+        "longitude",
+        "fajr",
+        "dhuhr",
+        "asr",
+        "maghrib",
+        "isha",
+        "sunrise",
+        "qiblaDirection",
+        "calculationMethod",
+        "cachedAt"
+      ]
+    },
+    "DailyContent": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DailyContent",
+      "type": "object",
+      "description": "Caches the daily Quranic Ayah and Hadith displayed on the dashboard for a specific date.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DailyContent entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the UserProfile for whom this content was displayed. (Relationship: UserProfile 1:N DailyContent)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The calendar date for which this daily content was displayed.",
+          "format": "date"
+        },
+        "ayahArabic": {
+          "type": "string",
+          "description": "The Arabic text of the daily Ayah."
+        },
+        "ayahTranslation": {
+          "type": "string",
+          "description": "The translation of the daily Ayah."
+        },
+        "ayahSurahName": {
+          "type": "string",
+          "description": "The name of the Surah from which the Ayah is taken."
+        },
+        "ayahNumber": {
+          "type": "number",
+          "description": "The number of the Ayah within its Surah."
+        },
+        "hadithArabic": {
+          "type": "string",
+          "description": "The Arabic text of the daily Hadith."
+        },
+        "hadithTranslation": {
+          "type": "string",
+          "description": "The translation of the daily Hadith."
+        },
+        "hadithSource": {
+          "type": "string",
+          "description": "The source book or collection of the Hadith (e.g., 'Sahih Bukhari')."
+        },
+        "hadithReference": {
+          "type": "string",
+          "description": "Specific reference or chapter/number for the Hadith (optional)."
+        },
+        "ayahReferenceId": {
+          "type": "string",
+          "description": "An external API-specific identifier for the daily Ayah."
+        },
+        "hadithReferenceId": {
+          "type": "string",
+          "description": "An external API-specific identifier for the daily Hadith (if applicable)."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "date",
+        "ayahArabic",
+        "ayahTranslation",
+        "ayahSurahName",
+        "ayahNumber",
+        "hadithArabic",
+        "hadithTranslation",
+        "hadithSource",
+        "ayahReferenceId"
+      ]
+    },
+    "Hadith": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Hadith",
+      "type": "object",
+      "description": "Represents a single Hadith from the bundled or curated local library.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Hadith entity."
+        },
+        "arabicText": {
+          "type": "string",
+          "description": "The Hadith text in Arabic."
+        },
+        "translation": {
+          "type": "string",
+          "description": "The English translation of the Hadith text."
+        },
+        "source": {
+          "type": "string",
+          "description": "The source collection from which the Hadith is derived (e.g., 'Sahih Bukhari')."
+        },
+        "reference": {
+          "type": "string",
+          "description": "Specific reference or chapter/number for the Hadith."
+        },
+        "collection": {
+          "type": "string",
+          "description": "The broader Hadith collection name (e.g., 'Bukhari', 'Muslim')."
+        }
+      },
+      "required": [
+        "id",
+        "arabicText",
+        "translation",
+        "source",
+        "reference",
+        "collection"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/profile",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores individual user profiles and their personalized application settings. Authorization is based on the user's UID matching the {userId} in the path, ensuring private access. The 'id' field within the UserProfile document is expected to match the {userId} path parameter. This structure supports secure 'get' and 'list' operations for a user's own profile.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user (Firebase Authentication UID)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/duas/{duaId}",
+        "definition": {
+          "entityName": "Dua",
+          "schema": {
+            "$ref": "#/backend/entities/Dua"
+          },
+          "description": "Contains the master library of supplications (Duas). This collection is publicly readable by all users (authenticated or anonymous) for browsing and search purposes. It enables secure and efficient 'list' queries for all available duas.",
+          "params": [
+            {
+              "name": "duaId",
+              "description": "Unique identifier for a specific Dua document."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/duaBookmarks/{bookmarkId}",
+        "definition": {
+          "entityName": "UserDuaBookmark",
+          "schema": {
+            "$ref": "#/backend/entities/UserDuaBookmark"
+          },
+          "description": "Stores a user's personal bookmarks of Duas. Each document is privately owned by the user specified in the path. Authorization ensures only the authenticated user can read or manage their own bookmarks. The 'userId' field in the document matches the path's {userId} for data integrity. This structure facilitates secure 'list' operations for a user's personal bookmarks.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this bookmark."
+            },
+            {
+              "name": "bookmarkId",
+              "description": "Unique identifier for the user's bookmarked Dua."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/dhikrSessions/{sessionId}",
+        "definition": {
+          "entityName": "DhikrSession",
+          "schema": {
+            "$ref": "#/backend/entities/DhikrSession"
+          },
+          "description": "Records the details of each dhikr counting session performed by a user. This collection is privately owned by the user identified in the path, allowing only the authenticated user to access their session history. The 'userId' field in the document matches the path's {userId} for data integrity. Enables secure 'list' queries for a user's past dhikr sessions.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who performed this dhikr session."
+            },
+            {
+              "name": "sessionId",
+              "description": "Unique identifier for a specific dhikr session."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/prayerTimes/{prayerTimeId}",
+        "definition": {
+          "entityName": "PrayerTime",
+          "schema": {
+            "$ref": "#/backend/entities/PrayerTime"
+          },
+          "description": "Caches personalized prayer times and Qibla direction data for a specific user and location/date. This data is private and accessible only by the owning user. Authorization is handled by matching the {userId} in the path to the authenticated user's UID. The 'userId' field in the document matches the path's {userId} for data integrity. Supports secure 'list' queries for a user's cached prayer times.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user for whom these prayer times are calculated."
+            },
+            {
+              "name": "prayerTimeId",
+              "description": "Unique identifier for a specific cached prayer time entry (e.g., a date-location hash)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/dailyContent/{contentDate}",
+        "definition": {
+          "entityName": "DailyContent",
+          "schema": {
+            "$ref": "#/backend/entities/DailyContent"
+          },
+          "description": "Stores the daily Quranic Ayah and Hadith content specifically displayed to a user on a given date. This collection is private to each user, ensuring that individual user content history is segregated. Authorization relies on the {userId} in the path. The 'userId' field in the document matches the path's {userId} for data integrity. Facilitates secure 'list' queries for a user's historical daily content.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user for whom this daily content was displayed."
+            },
+            {
+              "name": "contentDate",
+              "description": "The calendar date for which this daily content applies (e.g., 'YYYY-MM-DD')."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/hadiths/{hadithId}",
+        "definition": {
+          "entityName": "Hadith",
+          "schema": {
+            "$ref": "#/backend/entities/Hadith"
+          },
+          "description": "Contains the master library of Hadiths. Similar to Duas, this collection is publicly readable by all users (authenticated or anonymous) to browse and search the Hadith collection. It supports secure and efficient 'list' queries for all available hadiths.",
+          "params": [
+            {
+              "name": "hadithId",
+              "description": "Unique identifier for a specific Hadith document."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed following the core principles of Authorization Independence, Clarity of Intent, DBAC, and QAPs. All user-specific data is organized under a dedicated `/users/{userId}` path, establishing clear ownership and simplifying security rules. Publicly accessible data, such as the `Dua` and `Hadith` libraries, resides in global top-level collections.\n\n**Authorization Independence via Denormalization:** For all user-owned entities (UserProfile, UserDuaBookmark, DhikrSession, PrayerTime, DailyContent), authorization is achieved by embedding the `userId` directly into the document path (e.g., `/users/{userId}/profile`). This structural pattern eliminates the need for `get()` calls in security rules to check parent document ownership or relationships, as `request.auth.uid` can be directly compared against the `{userId}` wildcard in the path. This ensures atomic operations, simplifies rule logic, and enhances debuggability. There are no collaborative documents in the current scope that would require explicit 'members' map denormalization.\n\n**QAPs (Queries as Authorization Policies):**\n1.  **Private User Data:** For collections like `/users/{userId}/duaBookmarks`, `/users/{userId}/dhikrSessions`, `/users/{userId}/prayerTimes`, and `/users/{userId}/dailyContent`, the hierarchical path inherently enforces security for `list` operations. A user can only query within their own `/users/{request.auth.uid}/...` branch, preventing accidental or unauthorized access to other users' data. The security rules will simply verify that the requested `{userId}` matches `request.auth.uid`.\n2.  **Public Data:** For global collections such as `/duas` and `/hadiths`, the entire collection is designed to be publicly readable. This allows all users, including anonymous ones, to perform `list` queries efficiently and securely without any user-specific filtering, as per their intended access pattern."
+  }
+}

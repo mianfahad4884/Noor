@@ -1,0 +1,145 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * CORE PHILOSOPHY:
+     * This ruleset enforces a strict user-ownership model designed for privacy and security.
+     * All personal user data (profiles, bookmarks, sessions, and cached content) is logically 
+     * and physically segmented under the /users/{userId} path. Access to these branches 
+     * is restricted exclusively to the authenticated user whose UID matches the path parameter.
+     * 
+     * DATA STRUCTURE:
+     * - /users/{userId}: Private user-specific data trees.
+     * - /duas: Public master library of supplications.
+     * - /hadiths: Public master library of prophetic traditions.
+     * 
+     * KEY SECURITY DECISIONS:
+     * 1. Authorization via Path: By nesting personal data under {userId}, we ensure that list 
+     *    operations are inherently secure. A user can only query their own subcollections.
+     * 2. Denormalization for Performance: The 'userId' or 'id' is required within the document 
+     *    data on creation to verify consistency with the path, but updates focus on 
+     *    immutability of these relational links.
+     * 3. Prototyping Mode: Rules enforce 'who' can access 'what' based on identity, but do 
+     *    not restrict the 'shape' or 'type' of data (e.g., strings vs numbers) to allow 
+     *    for rapid feature iteration.
+     * 4. Read-Only Master Collections: The 'duas' and 'hadiths' collections are public for 
+     *    reading but restricted from client-side writes to maintain the integrity of the 
+     *    provided religious content.
+     */
+
+    // --- HELPER FUNCTIONS ---
+
+    /** Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** Checks if the authenticated user matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** Verifies ownership and ensures the document exists for state-changing operations. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for the user's personal profile and app settings.
+     * @path /users/{userId}/profile
+     * @allow Authenticated user (get) their own profile.
+     * @deny User B (list) User A's profile.
+     * @principle Ownership-based access with ID consistency check.
+     */
+    match /users/{userId}/profile {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for the public library of Duas (supplications).
+     * @path /duas/{duaId}
+     * @allow Any user (get, list) to browse the library.
+     * @deny Any user (create, update, delete) master library content.
+     * @principle Publicly readable master content with restricted writes.
+     */
+    match /duas/{duaId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+    /**
+     * @description Rules for a user's personal bookmarks of Duas.
+     * @path /users/{userId}/duaBookmarks/{bookmarkId}
+     * @allow Authenticated user (create) a bookmark for themselves.
+     * @deny Authenticated user (delete) someone else's bookmark.
+     * @principle Ownership-based access with relational integrity validation.
+     */
+    match /users/{userId}/duaBookmarks/{bookmarkId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Records of individual dhikr (tasbeeh) counting sessions.
+     * @path /users/{userId}/dhikrSessions/{sessionId}
+     * @allow Authenticated user (list) their own session history.
+     * @deny User A (update) User B's dhikr session data.
+     * @principle Private user-scoped subcollection access.
+     */
+    match /users/{userId}/dhikrSessions/{sessionId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Cached prayer times and Qibla data specific to a user's settings/location.
+     * @path /users/{userId}/prayerTimes/{prayerTimeId}
+     * @allow Authenticated user (create) a new cached prayer time entry.
+     * @deny Unauthenticated user (get) cached prayer times.
+     * @principle Ownership-based access for personalized cached data.
+     */
+    match /users/{userId}/prayerTimes/{prayerTimeId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Historical records of daily Ayah and Hadith content displayed to a user.
+     * @path /users/{userId}/dailyContent/{contentDate}
+     * @allow Authenticated user (get) their content for a specific date.
+     * @deny User B (list) User A's daily content history.
+     * @principle Private user-scoped history with UID immutability.
+     */
+    match /users/{userId}/dailyContent/{contentDate} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for the public library of Hadiths.
+     * @path /hadiths/{hadithId}
+     * @allow Any user (get, list) to read Hadith content.
+     * @deny Any user (update) the master Hadith collection from the client.
+     * @principle Publicly readable master content with restricted writes.
+     */
+    match /hadiths/{hadithId} {
+      allow get, list: if true;
+      allow create, update, delete: if false;
+    }
+
+  }
+}
