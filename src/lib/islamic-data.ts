@@ -121,6 +121,56 @@ export const HADITHS: Hadith[] = [
     reference: "Book 81, Hadith 5",
     grade: "Sahih",
     category: "Spirituality"
+  },
+  {
+    id: 8,
+    text: "A Muslim is one from whose tongue and hands the Muslims are safe.",
+    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+    source: "Sahih Bukhari",
+    narrator: "Abdullah ibn Amr",
+    reference: "Book 2, Hadith 10",
+    grade: "Sahih",
+    category: "Social"
+  },
+  {
+    id: 9,
+    text: "The most beloved of deeds to Allah are those that are most consistent, even if they are small.",
+    arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
+    source: "Sahih Bukhari",
+    narrator: "Aisha (RA)",
+    reference: "Book 81, Hadith 21",
+    grade: "Sahih",
+    category: "Consistency"
+  },
+  {
+    id: 10,
+    text: "Verily, Allah is Kind and He loves kindness in all matters.",
+    arabic: "إِنَّ اللَّهَ رَفِيقٌ يُحِبُّ الرِّفْقَ فِي الأَمْرِ كُلِّهِ",
+    source: "Sahih Bukhari",
+    narrator: "Aisha (RA)",
+    reference: "Book 88, Hadith 2",
+    grade: "Sahih",
+    category: "Mercy"
+  },
+  {
+    id: 11,
+    text: "He who does not show mercy to our young and honor our old is not one of us.",
+    arabic: "لَيْسَ مِنَّا مَنْ لَمْ يَرْحَمْ صَغِيرَنَا وَيَعْرِفْ شَرَفَ كَبِيرِنَا",
+    source: "Sunan Tirmidhi",
+    narrator: "Abdullah ibn Amr",
+    reference: "Hadith 1919",
+    grade: "Hasan",
+    category: "Character"
+  },
+  {
+    id: 12,
+    text: "The signs of a hypocrite are three: whenever he speaks, he tells a lie; whenever he promises, he breaks it; and whenever he is entrusted, he betrays that trust.",
+    arabic: "آيَةُ الْمُنَافِقِ ثَلاَثٌ إِذَا حَدَّثَ كَذَبَ، وَإِذَا وَعَدَ أَخْلَفَ، وَإِذَا اؤْتُمِنَ خَانَ",
+    source: "Sahih Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Book 2, Hadith 33",
+    grade: "Sahih",
+    category: "Faith"
   }
 ];
 
