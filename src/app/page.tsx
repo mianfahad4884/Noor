@@ -10,12 +10,14 @@ import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false);
   const [hijriDate, setHijriDate] = useState('');
   const [ayah, setAyah] = useState<any>(null);
   const [hadith, setHadith] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setMounted(true);
     setHijriDate(getHijriDate());
     setHadith(getRandomHadith());
     getDailyAyah().then(data => {
@@ -23,6 +25,10 @@ export default function Home() {
       setLoading(false);
     });
   }, []);
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-background" />;
+  }
 
   return (
     <div className="space-y-6 px-6 pt-10">
