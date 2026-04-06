@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getHijriDate, getDailyAyah, getRandomHadith } from '@/lib/islamic-data';
-import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen } from 'lucide-react';
+import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen, Book } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -70,9 +70,10 @@ export default function Home() {
       {/* Quick Actions */}
       <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
         {[
-          { icon: Hash, label: 'Tasbeeh', href: '/tasbeeh' },
+          { icon: Book, label: 'Quran', href: '/quran' },
           { icon: Sparkles, label: 'AI Tools', href: '/explainer' },
           { icon: BookOpen, label: 'Duas', href: '/duas' },
+          { icon: Hash, label: 'Tasbeeh', href: '/tasbeeh' },
           { icon: MapPin, label: 'Qibla', href: '/qibla' }
         ].map((action) => (
           <Link key={action.label} href={action.href}>
@@ -86,7 +87,10 @@ export default function Home() {
 
       {/* Daily Ayah */}
       <section className="space-y-3">
-        <h2 className="text-lg font-headline font-bold px-1">Daily Ayah</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-lg font-headline font-bold">Daily Ayah</h2>
+          <Link href="/quran" className="text-xs font-bold text-accent uppercase tracking-widest hover:underline">Read More</Link>
+        </div>
         <Card className="rounded-[2rem] border-border/50 shadow-sm overflow-hidden bg-white dark:bg-card">
           <CardContent className="p-8 space-y-6">
             {loading ? (
@@ -117,7 +121,7 @@ export default function Home() {
       </section>
 
       {/* Daily Hadith */}
-      <section className="space-y-3">
+      <section className="space-y-3 pb-8">
         <h2 className="text-lg font-headline font-bold px-1">Wisdom for Today</h2>
         <Card className="rounded-[2rem] border-border/50 shadow-sm bg-[#F0F4F2] dark:bg-[#152B1E] border-none">
           <CardContent className="p-8 space-y-4">

@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Hash, BookOpen, Compass, User, Sparkles } from 'lucide-react';
+import { Home, Hash, BookOpen, Compass, User, Sparkles, Book } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -12,11 +12,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { label: 'Home', icon: Home, href: '/' },
-    { label: 'Tasbeeh', icon: Hash, href: '/tasbeeh' },
+    { label: 'Quran', icon: Book, href: '/quran' },
     { label: 'Duas', icon: BookOpen, href: '/duas' },
-    { label: 'AI Explainer', icon: Sparkles, href: '/explainer' },
+    { label: 'Tasbeeh', icon: Hash, href: '/tasbeeh' },
     { label: 'Qibla', icon: Compass, href: '/qibla' },
-    { label: 'Profile', icon: User, href: '/profile' },
+    { label: 'More', icon: User, href: '/profile' },
   ];
 
   return (
@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center p-2 rounded-2xl transition-all duration-300 relative group",
+                  "flex flex-col items-center justify-center p-2 rounded-2xl transition-all duration-300 relative group min-w-[56px]",
                   isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent/10"
                 )}
               >

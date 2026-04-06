@@ -1,0 +1,186 @@
+
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, BookOpen, ChevronLeft, Loader2, Languages, Hash } from 'lucide-react';
+import { getSurahList, getSurahDetail, QURAN_EDITIONS } from '@/lib/islamic-data';
+
+export default function QuranPage() {
+  const [mounted, setMounted] = useState(false);
+  const [surahs, setSurahs] = useState<any[]>([]);
+  const [filteredSurahs, setFilteredSurahs] = useState<any[]>([]);
+  const [selectedSurah, setSelectedSurah] = useState<any>(null);
+  const [surahContent, setSurahContent] = useState<any>(null);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(false);
+  const [edition, setEdition] = useState('en.sahih');
+
+  useEffect(() => {
+    setMounted(true);
+    getSurahList().then(data => {
+      setSurahs(data);
+      setFilteredSurahs(data);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    setFilteredSurahs(
+      surahs.filter(s => 
+        s.englishName.toLowerCase().includes(search.toLowerCase()) ||
+        s.name.includes(search) ||
+        s.number.toString().includes(search)
+      )
+    );
+  }, [search, surahs]);
+
+  useEffect(() => {
+    if (selectedSurah) {
+      loadSurah(selectedSurah.number, edition);
+    }
+  }, [edition]);
+
+  async function loadSurah(number: number, currentEdition: string) {
+    setContentLoading(true);
+    const data = await getSurahDetail(number, currentEdition);
+    setSurahContent(data);
+    setContentLoading(false);
+  }
+
+  function handleSurahClick(surah: any) {
+    setSelectedSurah(surah);
+    loadSurah(surah.number, edition);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (!mounted) return null;
+
+  return (
+    <div className="min-h-screen pb-20">
+      {!selectedSurah ? (
+        <div className="space-y-6 pt-12 px-6">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-headline font-bold">The Noble Quran</h1>
+            <p className="text-muted-foreground">Read and explore the divine words.</p>
+          </div>
+
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search by name or number..."
+              className="pl-10 h-14 rounded-2xl bg-card border-border/50"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="grid gap-3">
+            {loading ? (
+              [...Array(6)].map((_, i) => (
+                <div key={i} className="h-20 bg-muted animate-pulse rounded-3xl" />
+              ))
+            ) : (
+              filteredSurahs.map((surah) => (
+                <button
+                  key={surah.number}
+                  onClick={() => handleSurahClick(surah)}
+                  className="flex items-center gap-4 p-4 rounded-3xl bg-card border border-border/50 hover:border-accent transition-all group text-left"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">
+                    {surah.number}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold truncate">{surah.englishName}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{surah.englishNameTranslation}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="font-arabic text-primary font-bold">{surah.name}</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest">{surah.numberOfAyahs} Ayahs</p>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b px-6 py-4 flex items-center gap-4">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="rounded-full"
+              onClick={() => {
+                setSelectedSurah(null);
+                setSurahContent(null);
+              }}
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </Button>
+            <div className="flex-1">
+              <h2 className="text-lg font-headline font-bold">{selectedSurah.englishName}</h2>
+              <p className="text-xs text-muted-foreground">{selectedSurah.englishNameTranslation} • {selectedSurah.revelationType}</p>
+            </div>
+            <Select value={edition} onValueChange={setEdition}>
+              <SelectTrigger className="w-fit border-none shadow-none bg-transparent h-fit p-0 hover:text-accent">
+                <Languages className="w-5 h-5" />
+              </SelectTrigger>
+              <SelectContent>
+                {QURAN_EDITIONS.map(ed => (
+                  <SelectItem key={ed.id} value={ed.id}>
+                    <span className="mr-2">{ed.flag}</span> {ed.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="px-6 space-y-6 pb-12">
+            {contentLoading || !surahContent ? (
+              <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                <p className="text-sm text-muted-foreground">Loading Ayahs...</p>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {selectedSurah.number !== 1 && selectedSurah.number !== 9 && (
+                   <div className="text-center py-8">
+                      <p className="text-3xl font-arabic text-primary">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                   </div>
+                )}
+                
+                {surahContent[0].ayahs.map((ayah: any, index: number) => {
+                  const translationAyah = surahContent[1].ayahs[index];
+                  return (
+                    <div key={ayah.number} className="space-y-4 group">
+                      <div className="flex items-start justify-between gap-4">
+                        <Badge variant="outline" className="rounded-lg h-7 border-border/50 text-[10px] font-bold text-muted-foreground bg-card">
+                          {ayah.numberInSurah}
+                        </Badge>
+                        <div className="flex-1">
+                           <p className="text-right text-3xl font-arabic leading-[4rem] text-primary tracking-wide">
+                            {ayah.text}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="pl-12">
+                        <p className="text-sm text-foreground/80 leading-relaxed italic border-l-2 border-accent/20 pl-4">
+                          {translationAyah.text}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
