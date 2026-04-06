@@ -25,7 +25,12 @@ export default function HadithPage() {
 
   const filteredHadiths = HADITHS.filter(h => {
     const matchesCategory = activeCategory ? h.category === activeCategory : true;
-    const matchesBook = selectedBook ? h.source.toLowerCase().includes(selectedBook.toLowerCase()) : true;
+    
+    // Improved book matching to handle source names like "Sunan an-Nasa'i" or "Sahih Muslim"
+    const matchesBook = selectedBook 
+      ? h.source.toLowerCase().includes(selectedBook.toLowerCase().replace('sahih ', '').replace('sunan ', '').replace('jami` at-', '').split(' ')[0]) 
+      : true;
+
     const matchesSearch = 
       h.text.toLowerCase().includes(search.toLowerCase()) || 
       h.narrator.toLowerCase().includes(search.toLowerCase()) ||
@@ -38,7 +43,15 @@ export default function HadithPage() {
   const handleBrowseBook = (bookId: string) => {
     const book = HADITH_BOOKS.find(b => b.id === bookId);
     if (book) {
-      setSelectedBook(book.name.replace('Sahih ', '').replace('Sunan ', ''));
+      // Use the last word or main part of the book name for matching (e.g., "Bukhari", "Muslim", "Nasa'i")
+      const bookNameKey = book.name
+        .replace('Sahih ', '')
+        .replace('Sunan ', '')
+        .replace('Jami` at-', '')
+        .replace('Jami\' at-', '')
+        .split(' ')[0];
+      
+      setSelectedBook(bookNameKey);
       setActiveTab('all');
       setSearch('');
       setActiveCategory(null);
@@ -88,7 +101,7 @@ export default function HadithPage() {
                   onClick={clearBookFilter}
                   className="text-[10px] font-bold text-primary underline uppercase tracking-widest"
                 >
-                  Clear Book: {selectedBook}
+                  Clear Collection Filter
                 </button>
               )}
             </div>
@@ -116,6 +129,14 @@ export default function HadithPage() {
               ))}
             </div>
           </div>
+
+          {selectedBook && (
+            <div className="px-1">
+              <Badge variant="outline" className="rounded-full bg-accent/5 border-accent/20 text-accent font-bold py-1 px-4">
+                Showing: {selectedBook}
+              </Badge>
+            </div>
+          )}
 
           <div className="space-y-6">
             {filteredHadiths.length > 0 ? filteredHadiths.map((hadith) => (
@@ -174,6 +195,9 @@ export default function HadithPage() {
               <div className="text-center py-20 opacity-30">
                 <BookOpen className="w-16 h-16 mx-auto mb-4" />
                 <p className="text-lg font-bold">No hadiths match your criteria.</p>
+                <Button variant="link" onClick={() => { setSearch(''); setActiveCategory(null); setSelectedBook(null); }} className="mt-4">
+                  Reset all filters
+                </Button>
               </div>
             )}
           </div>

@@ -126,63 +126,123 @@ export const HADITHS: Hadith[] = [
   },
   {
     id: 7,
-    text: "Be in this world as if you were a stranger or a traveler.",
-    arabic: "كُنْ فِي الدُّنْيَا كَأَنَّكَ غَرِيبٌ أَوْ عَابِرُ سَبِيلٍ",
+    text: "Religion is easy, and no one overburdens himself in religion except that it will overcome him. So be moderate and follow the middle path.",
+    arabic: "إِنَّ الدِّينَ يُسْرٌ ، وَلَنْ يُشَادَّ الدِّينَ أَحَدٌ إِلاَّ غَلَبَهُ ، فَسَدِّدُوا وَقَارِبُوا",
     source: "Sahih Bukhari",
-    narrator: "Ibn Umar",
-    reference: "Book 81, Hadith 5",
+    narrator: "Abu Hurairah",
+    reference: "Book 2, Hadith 32",
     grade: "Sahih",
-    category: "Spirituality"
+    category: "Moderation"
   },
   {
     id: 8,
-    text: "A Muslim is one from whose tongue and hands the Muslims are safe.",
-    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
-    source: "Sahih Bukhari",
+    text: "The merciful will be shown mercy by the Most Merciful. Be merciful to those on the earth and the One in the heavens will have mercy upon you.",
+    arabic: "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ ارْحَمُوا مَنْ فِي الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
+    source: "Sunan Abi Dawud",
     narrator: "Abdullah ibn Amr",
-    reference: "Book 2, Hadith 10",
-    grade: "Sahih",
-    category: "Social"
-  },
-  {
-    id: 9,
-    text: "The most beloved of deeds to Allah are those that are most consistent, even if they are small.",
-    arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
-    source: "Sahih Bukhari",
-    narrator: "Aisha (RA)",
-    reference: "Book 81, Hadith 21",
-    grade: "Sahih",
-    category: "Consistency"
-  },
-  {
-    id: 10,
-    text: "Verily, Allah is Kind and He loves kindness in all matters.",
-    arabic: "إِنَّ اللَّهَ رَفِيقٌ يُحِبُّ الرِّفْقَ فِي الأَمْرِ كُلِّهِ",
-    source: "Sahih Bukhari",
-    narrator: "Aisha (RA)",
-    reference: "Book 88, Hadith 2",
+    reference: "Hadith 4941",
     grade: "Sahih",
     category: "Mercy"
   },
   {
+    id: 9,
+    text: "The strongest among you is not the one who can wrestle, but the one who can control his anger.",
+    arabic: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
+    source: "Sahih Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Book 78, Hadith 141",
+    grade: "Sahih",
+    category: "Character"
+  },
+  {
+    id: 10,
+    text: "Allah is Beautiful and He loves beauty.",
+    arabic: "إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ",
+    source: "Sahih Muslim",
+    narrator: "Abdullah ibn Mas'ud",
+    reference: "Book 1, Hadith 172",
+    grade: "Sahih",
+    category: "Spirituality"
+  },
+  {
     id: 11,
-    text: "He who does not show mercy to our young and honor our old is not one of us.",
-    arabic: "لَيْسَ مِنَّا مَنْ لَمْ يَرْحَمْ صَغِيرَنَا وَيَعْرِفْ شَرَفَ كَبِيرِنَا",
+    text: "The most beloved of people to Allah is the one who brings most benefit to people.",
+    arabic: "أَحَبُّ النَّاسِ إِلَى اللَّهِ أَنْفَعُهُمْ لِلنَّاسِ",
+    source: "Jami` at-Tirmidhi",
+    narrator: "Ibn Umar",
+    reference: "Hadith 1565",
+    grade: "Hasan",
+    category: "Social"
+  },
+  {
+    id: 12,
+    text: "Modesty is part of faith.",
+    arabic: "الْحَيَاءُ مِنَ الإِيمَانِ",
+    source: "Sahih Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Book 2, Hadith 2",
+    grade: "Sahih",
+    category: "Character"
+  },
+  {
+    id: 13,
+    text: "Take advantage of five before five: your youth before your old age, your health before your sickness, your wealth before your poverty, your free time before your busy-ness, and your life before your death.",
+    arabic: "اغْتَنِمْ خَمْسًا قَبْلَ خَمْسٍ",
+    source: "Sunan an-Nasa'i",
+    narrator: "Ibn Abbas",
+    reference: "Hadith 586",
+    grade: "Sahih",
+    category: "Spirituality"
+  },
+  {
+    id: 14,
+    text: "Seeking knowledge is an obligation upon every Muslim.",
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Book 1, Hadith 224",
+    grade: "Sahih",
+    category: "Knowledge"
+  },
+  {
+    id: 15,
+    text: "The world is a prison for the believer and a paradise for the disbeliever.",
+    arabic: "الدُّنْيَا سِجْنُ الْمُؤْمِنِ وَجَنَّةُ الْكَافِرِ",
+    source: "Sahih Muslim",
+    narrator: "Abu Hurairah",
+    reference: "Book 42, Hadith 7058",
+    grade: "Sahih",
+    category: "Spirituality"
+  },
+  {
+    id: 16,
+    text: "The sign of a person's being a good Muslim is that he should leave alone that which does not concern him.",
+    arabic: "مِنْ حُسْنِ إِسْلاَمِ الْمَرْءِ تَرْكُهُ مَا لاَ يَعْنِيهِ",
     source: "Sunan Tirmidhi",
-    narrator: "Abdullah ibn Amr",
-    reference: "Hadith 1919",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 2317",
     grade: "Hasan",
     category: "Character"
   },
   {
-    id: 12,
-    text: "The signs of a hypocrite are three: whenever he speaks, he tells a lie; whenever he promises, he breaks it; and whenever he is entrusted, he betrays that trust.",
-    arabic: "آيَةُ الْمُنَافِقِ ثَلاَثٌ إِذَا حَدَّثَ كَذَبَ، وَإِذَا وَعَدَ أَخْلَفَ، وَإِذَا اؤْتُمِنَ خَانَ",
+    id: 17,
+    text: "A kind word is a form of charity.",
+    arabic: "الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ",
     source: "Sahih Bukhari",
     narrator: "Abu Hurairah",
-    reference: "Book 2, Hadith 33",
+    reference: "Book 56, Hadith 101",
     grade: "Sahih",
-    category: "Faith"
+    category: "Character"
+  },
+  {
+    id: 18,
+    text: "Richness is not having many possessions, but richness is being content with oneself.",
+    arabic: "لَيْسَ الْغِنَى عَنْ كَثْرَةِ الْعَرَضِ، وَلَكِنَّ الْغِنَى غِنَى النَّفْسِ",
+    source: "Sahih Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Book 81, Hadith 35",
+    grade: "Sahih",
+    category: "Spirituality"
   }
 ];
 
