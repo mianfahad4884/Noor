@@ -1,4 +1,4 @@
-'use server';
+
 /**
  * @fileOverview A specialized AI agent to find and verify Hadiths from major collections.
  * 

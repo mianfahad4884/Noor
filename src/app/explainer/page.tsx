@@ -8,7 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Loader2, Book, History, Info } from 'lucide-react';
-import { aiIslamicTextExplainerTool, AiIslamicTextExplainerToolOutput } from '@/ai/flows/ai-islamic-text-explainer-tool';
+// We'll import the tool type only and use a dynamic approach to avoid bundling server code
+import type { AiIslamicTextExplainerToolOutput } from '@/ai/flows/ai-islamic-text-explainer-tool';
 
 export default function ExplainerPage() {
   const [text, setText] = useState('');
@@ -21,7 +22,21 @@ export default function ExplainerPage() {
     if (!text.trim()) return;
     setLoading(true);
     try {
-      const output = await aiIslamicTextExplainerTool({ text, textType, reference });
+      // In a static/mobile environment, we'd typically call an external API
+      // Since we want the build to succeed, we'll provide a placeholder or try to load the tool dynamically if available
+      let output: AiIslamicTextExplainerToolOutput;
+      
+      if (process.env.NODE_ENV === 'development') {
+        const { aiIslamicTextExplainerTool } = await import('@/ai/flows/ai-islamic-text-explainer-tool');
+        output = await aiIslamicTextExplainerTool({ text, textType, reference });
+      } else {
+        // Fallback for the static APK build - in a real app, this would be a fetch() to a backend
+        output = {
+          explanation: "AI insights require an active internet connection and a hosted backend. This feature is currently in 'Static Mode' for the APK build.",
+          insights: "Please ensure you have configured your Firebase backend to host the Genkit flows.",
+          historicalBackground: "Once hosted, this AI tool will provide deep contextual and historical insights for your queries."
+        };
+      }
       setResult(output);
     } catch (error) {
       console.error(error);

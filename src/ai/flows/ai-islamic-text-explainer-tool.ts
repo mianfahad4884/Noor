@@ -1,4 +1,4 @@
-'use server';
+
 /**
  * @fileOverview This file implements a Genkit flow for an AI Islamic Text Explainer Tool.
  * It provides contextual explanations, deeper insights, and historical background for Quranic verses or Hadiths.

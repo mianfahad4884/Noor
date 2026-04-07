@@ -11,7 +11,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Search, Quote, Bookmark, Share2, Filter, Library, User, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { HADITHS, HADITH_BOOKS } from '@/lib/islamic-data';
-import { findHadith, FindHadithsOutput } from '@/ai/flows/ai-hadith-finder';
+// Only import the type for the static build
+import type { FindHadithsOutput } from '@/ai/flows/ai-hadith-finder';
 
 export default function HadithPage() {
   const [mounted, setMounted] = useState(false);
@@ -69,10 +70,32 @@ export default function HadithPage() {
     setIsAiSearching(true);
     setAiResults([]);
     try {
-      const result = await findHadith({ 
-        query: search, 
-        bookPreference: selectedBook || undefined 
-      });
+      let result: FindHadithsOutput;
+      
+      if (process.env.NODE_ENV === 'development') {
+        const { findHadith } = await import('@/ai/flows/ai-hadith-finder');
+        result = await findHadith({ 
+          query: search, 
+          bookPreference: selectedBook || undefined 
+        });
+      } else {
+        // Fallback for the static APK build
+        result = {
+          results: [
+            {
+              text: "The AI Researcher requires a hosted backend to search the full canon. This feature is in 'Offline Mode' for the APK build.",
+              arabic: "هذه الميزة تتطلب خادمًا",
+              source: "System",
+              narrator: "AI Guide",
+              reference: "N/A",
+              grade: "Sahih",
+              explanation: "Please configure your Firebase functions or separate server to enable full canon search."
+            }
+          ],
+          count: 1
+        };
+      }
+
       if (result.results && result.results.length > 0) {
         setAiResults(result.results);
       }
