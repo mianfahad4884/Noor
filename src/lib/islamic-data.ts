@@ -1,6 +1,8 @@
 
 export const UMMAH_API_KEY = 'umh_316473711ce8b29689d2548be3a64eee0f39fb53';
-export const UMMAH_BASE_URL = 'https://api.alquran.cloud/v1'; // Using standard as base, but prepared for Ummah specific endpoints if needed
+export const UMMAH_SECOND_KEY = 'HeZy5vFwbJb9qwVhrw9gYA752qnAZR8K3hikElZLU9zsRFF9';
+export const UMMAH_BASE_URL = 'https://api.alquran.cloud/v1';
+export const ALADHAN_BASE_URL = 'https://api.aladhan.com/v1';
 
 export async function getDailyAyah() {
   try {
@@ -46,6 +48,47 @@ export async function getAyahAudio(ayahNumber: number, edition: string = 'ar.ala
   } catch (error) {
     console.error('Error fetching ayah audio:', error);
     return null;
+  }
+}
+
+export async function getPrayerTimes(latitude: number, longitude: number, date: string) {
+  try {
+    // Format date as DD-MM-YYYY
+    const [year, month, day] = date.split('-');
+    const formattedDate = `${day}-${month}-${year}`;
+    const response = await fetch(`${ALADHAN_BASE_URL}/timings/${formattedDate}?latitude=${latitude}&longitude=${longitude}&method=2`);
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching prayer times:', error);
+    return null;
+  }
+}
+
+export async function getZakatNisab() {
+  try {
+    // Note: In a real app, this would hit a live gold/silver rate API
+    // Placeholder values representing current approximate rates
+    return {
+      goldPricePerGram: 65.50, // USD
+      silverPricePerGram: 0.85, // USD
+      nisabGoldGrams: 87.48,
+      nisabSilverGrams: 612.36,
+    };
+  } catch (error) {
+    console.error('Error fetching zakat nisab:', error);
+    return null;
+  }
+}
+
+export async function getAsmaUlHusna() {
+  try {
+    const response = await fetch(`${ALADHAN_BASE_URL}/asmaAlHusna`);
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching names of Allah:', error);
+    return [];
   }
 }
 

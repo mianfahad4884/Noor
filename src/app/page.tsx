@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getHijriDate, getDailyAyah, getRandomHadith, Hadith } from '@/lib/islamic-data';
-import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen, Book, ScrollText } from 'lucide-react';
+import { Share2, Clock, MapPin, Sparkles, Hash, BookOpen, Book, ScrollText, Coins, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-6 px-6 pt-10">
+    <div className="space-y-6 px-6 pt-10 pb-24">
       {/* Hero Greeting */}
       <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-primary to-[#2D5A47] p-8 text-primary-foreground shadow-xl group">
         <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -53,18 +53,20 @@ export default function Home() {
             </Badge>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 flex items-center justify-between border border-white/10 group-hover:bg-white/20 transition-all">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-accent rounded-xl text-accent-foreground">
-                <Clock className="w-5 h-5" />
+          <Link href="/prayer-times">
+            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 flex items-center justify-between border border-white/10 group-hover:bg-white/20 transition-all cursor-pointer">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-accent rounded-xl text-accent-foreground">
+                  <Clock className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-white/70">Next Prayer</p>
+                  <p className="text-lg font-bold">Dhuhr · 12:34 PM</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-white/70">Next Prayer</p>
-                <p className="text-lg font-bold">Dhuhr · 12:34 PM</p>
-              </div>
+              <p className="text-sm font-medium text-accent">in 2h 15m</p>
             </div>
-            <p className="text-sm font-medium text-accent">in 2h 15m</p>
-          </div>
+          </Link>
         </div>
       </div>
 
@@ -74,6 +76,8 @@ export default function Home() {
           { icon: Book, label: 'Quran', href: '/quran' },
           { icon: ScrollText, label: 'Hadith', href: '/hadith' },
           { icon: Sparkles, label: 'AI Tools', href: '/explainer' },
+          { icon: Heart, label: 'Names', href: '/names-of-allah' },
+          { icon: Coins, label: 'Zakat', href: '/zakat' },
           { icon: BookOpen, label: 'Duas', href: '/duas' },
           { icon: Hash, label: 'Tasbeeh', href: '/tasbeeh' },
           { icon: MapPin, label: 'Qibla', href: '/qibla' }
