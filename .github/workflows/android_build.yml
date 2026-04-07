@@ -22,8 +22,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Install Dependencies
         run: npm install
@@ -37,6 +37,12 @@ jobs:
             npx cap add android
           fi
           npx cap sync android
+
+      - name: List Android Files (Debug)
+        run: |
+          if [ -d "android" ]; then
+            ls -R android
+          fi
 
       - name: Build Android APK
         run: |
