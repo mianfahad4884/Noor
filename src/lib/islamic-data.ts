@@ -189,7 +189,9 @@ export const QURAN_EDITIONS = [
 ];
 
 export const QURAN_TAFSEERS = [
-  { id: 'en.ibnkathir', name: 'Ibn Kathir (English)', author: 'Ibn Kathir' },
-  { id: 'ar.jalalayn', name: 'Jalalayn (Arabic)', author: 'Al-Siyuti & Al-Mahalli' },
-  { id: 'ar.muyassar', name: 'Al-Muyassar (Arabic)', author: 'Various' },
+  { id: 'en.ibnkathir', name: 'Ibn Kathir (English)', author: 'Ibn Kathir', lang: 'English' },
+  { id: 'ur.kanzuliman', name: 'Kanzul Iman (Urdu)', author: 'Ahmed Raza Khan', lang: 'Urdu' },
+  { id: 'tr.diyanet', name: 'Diyanet (Turkish)', author: 'Diyanet', lang: 'Turkish' },
+  { id: 'ar.jalalayn', name: 'Jalalayn (Arabic)', author: 'Al-Siyuti & Al-Mahalli', lang: 'Arabic' },
+  { id: 'ar.muyassar', name: 'Al-Muyassar (Arabic)', author: 'Various', lang: 'Arabic' },
 ];

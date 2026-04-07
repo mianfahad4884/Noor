@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, ChevronLeft, Loader2, Languages, BookOpen, Info } from 'lucide-react';
+import { Search, ChevronLeft, Loader2, Languages, BookOpen, Info, Book } from 'lucide-react';
 import { getSurahList, getSurahDetail, QURAN_EDITIONS, QURAN_TAFSEERS } from '@/lib/islamic-data';
 
 export default function QuranPage() {
@@ -147,7 +147,7 @@ export default function QuranPage() {
           </div>
 
           <div className="px-6 space-y-6 pb-12">
-            <Tabs defaultValue="translation" className="w-full" onValueChange={(v: any) => setViewMode(v)}>
+            <Tabs value={viewMode} onValueChange={(v: any) => setViewMode(v)}>
               <TabsList className="grid w-full grid-cols-2 rounded-2xl h-12 bg-muted/50 p-1">
                 <TabsTrigger value="translation" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Translation</TabsTrigger>
                 <TabsTrigger value="tafseer" className="rounded-xl font-bold uppercase tracking-widest text-[10px]">Tafseer</TabsTrigger>
@@ -155,14 +155,20 @@ export default function QuranPage() {
 
               <div className="mt-6">
                 {viewMode === 'tafseer' && (
-                  <div className="mb-6">
+                  <div className="mb-6 space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Select Tafseer Language / Author</label>
                     <Select value={tafseerEdition} onValueChange={setTafseerEdition}>
-                      <SelectTrigger className="h-10 rounded-xl bg-card">
-                        <SelectValue placeholder="Select Tafseer" />
+                      <SelectTrigger className="h-12 rounded-xl bg-card border-accent/20">
+                        <div className="flex items-center gap-2">
+                          <Book className="w-4 h-4 text-accent" />
+                          <SelectValue placeholder="Select Tafseer" />
+                        </div>
                       </SelectTrigger>
                       <SelectContent>
                         {QURAN_TAFSEERS.map(t => (
-                          <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                          <SelectItem key={t.id} value={t.id}>
+                            <span className="font-bold text-accent">[{t.lang}]</span> {t.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -204,7 +210,10 @@ export default function QuranPage() {
                                  {viewMode === 'tafseer' ? `Tafseer ${QURAN_TAFSEERS.find(t => t.id === tafseerEdition)?.author}` : 'Translation'}
                                </span>
                             </div>
-                            <p className="text-sm text-foreground/90 leading-relaxed italic">
+                            <p className={cn(
+                              "text-sm text-foreground/90 leading-relaxed italic",
+                              viewMode === 'tafseer' && "font-medium not-italic"
+                            )}>
                               {secondaryAyah?.text || "Tafseer loading..."}
                             </p>
                           </Card>
