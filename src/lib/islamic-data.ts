@@ -35,13 +35,44 @@ export async function getSurahDetail(surahNumber: number, edition: string = 'en.
   }
 }
 
-export function getHijriDate() {
+export function getHijriDate(date: Date = new Date()) {
   return new Intl.DateTimeFormat('en-u-ca-islamic-uma', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
-  }).format(new Date());
+  }).format(date);
 }
+
+export function getHijriMonthName(date: Date = new Date()) {
+  return new Intl.DateTimeFormat('en-u-ca-islamic-uma', {
+    month: 'long',
+  }).format(date);
+}
+
+export function getHijriYear(date: Date = new Date()) {
+  return new Intl.DateTimeFormat('en-u-ca-islamic-uma', {
+    year: 'numeric',
+  }).format(date);
+}
+
+export interface IslamicEvent {
+  name: string;
+  hijriDate: string;
+  description: string;
+}
+
+export const ISLAMIC_EVENTS: IslamicEvent[] = [
+  { name: "Islamic New Year", hijriDate: "1 Muharram", description: "Beginning of the Hijri year." },
+  { name: "Ashura", hijriDate: "10 Muharram", description: "Day of fasting and remembrance." },
+  { name: "Mawlid al-Nabi", hijriDate: "12 Rabi' al-Awwal", description: "Birth of Prophet Muhammad (ﷺ)." },
+  { name: "Isra' and Mi'raj", hijriDate: "27 Rajab", description: "The Night Journey and Ascension." },
+  { name: "Ramadan Start", hijriDate: "1 Ramadan", description: "Month of fasting begins." },
+  { name: "Laylat al-Qadr", hijriDate: "27 Ramadan", description: "The Night of Power." },
+  { name: "Eid al-Fitr", hijriDate: "1 Shawwal", description: "Festival of breaking the fast." },
+  { name: "Hajj Season", hijriDate: "8-13 Dhu al-Hijjah", description: "The annual pilgrimage to Makkah." },
+  { name: "Day of Arafah", hijriDate: "9 Dhu al-Hijjah", description: "The pinnacle of Hajj." },
+  { name: "Eid al-Adha", hijriDate: "10 Dhu al-Hijjah", description: "Festival of Sacrifice." },
+];
 
 export interface Hadith {
   id: number;
@@ -64,7 +95,6 @@ export const HADITH_BOOKS = [
 ];
 
 export const HADITHS: Hadith[] = [
-  // Faith & Intentions
   {
     id: 1,
     text: "Actions are judged by intentions, and every person will get what they intended.",
@@ -75,7 +105,6 @@ export const HADITHS: Hadith[] = [
     grade: "Sahih",
     category: "Faith"
   },
-  // Parents & Mothers
   {
     id: 21,
     text: "Heaven lies under the feet of mothers.",
@@ -97,17 +126,6 @@ export const HADITHS: Hadith[] = [
     category: "Parents"
   },
   {
-    id: 23,
-    text: "The pleasure of the Lord is in the pleasure of the parents, and the displeasure of the Lord is in the displeasure of the parents.",
-    arabic: "رِضَا الرَّبِّ فِي رِضَا الْوَالِدِ وَسُخْطُ الرَّبِّ فِي سُخْطِ الْوَالِدِ",
-    source: "Jami` at-Tirmidhi",
-    narrator: "Abdullah bin Amr",
-    reference: "Hadith 1899",
-    grade: "Sahih",
-    category: "Parents"
-  },
-  // Character & Manners
-  {
     id: 2,
     text: "The best among you are those who have the best manners and character.",
     arabic: "خِيَارُكُمْ أَحْسَنُكُمْ أَخْلاَقًا",
@@ -127,7 +145,6 @@ export const HADITHS: Hadith[] = [
     grade: "Sahih",
     category: "Faith"
   },
-  // Knowledge
   {
     id: 5,
     text: "Whoever follows a path in pursuit of knowledge, Allah will make easy for him a path to Paradise.",
@@ -137,37 +154,6 @@ export const HADITHS: Hadith[] = [
     reference: "Hadith 2699",
     grade: "Sahih",
     category: "Knowledge"
-  },
-  {
-    id: 13,
-    text: "Seeking knowledge is an obligation upon every Muslim.",
-    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 224",
-    grade: "Sahih",
-    category: "Knowledge"
-  },
-  // Mercy & Social
-  {
-    id: 7,
-    text: "The merciful will be shown mercy by the Most Merciful. Be merciful to those on the earth and the One in the heavens will have mercy upon you.",
-    arabic: "الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ ارْحَمُوا مَنْ فِي الأَرْضِ يَرْحَمْكُمْ مَنْ فِي السَّمَاءِ",
-    source: "Sunan Abi Dawud",
-    narrator: "Abdullah ibn Amr",
-    reference: "Hadith 4941",
-    grade: "Sahih",
-    category: "Mercy"
-  },
-  {
-    id: 18,
-    text: "The parable of the believers in their mutual love, mercy and compassion is that of a body; when any limb aches, the whole body reacts with sleeplessness and fever.",
-    arabic: "مَثَلُ الْمُؤْمِنِينَ فِي تَوَادِّهِمْ وَتَرَاحُمِهِمْ وَتَعَاطُفِهِمْ مَثَلُ الْجَسَدِ إِذَا اشْتَكَى مِنْهُ عُضْوٌ تَدَاعَى لَهُ سَائِرُ الْجَسَدِ بِالسَّهَرِ وَالْحُمَّى",
-    source: "Sahih Muslim",
-    narrator: "Nu'man bin Bashir",
-    reference: "Hadith 2586",
-    grade: "Sahih",
-    category: "Social"
   }
 ];
 
@@ -181,11 +167,6 @@ export const QURAN_EDITIONS = [
   { id: 'tr.diyanet', name: 'Turkish (Diyanet)', flag: '🇹🇷' },
   { id: 'id.indonesian', name: 'Indonesian', flag: '🇮🇩' },
   { id: 'bn.bengali', name: 'Bengali', flag: '🇧🇩' },
-  { id: 'fa.ansarian', name: 'Farsi (Ansarian)', flag: '🇮🇷' },
-  { id: 'ms.basmeih', name: 'Malay (Basmeih)', flag: '🇲🇾' },
-  { id: 'fr.hamidullah', name: 'French (Hamidullah)', flag: '🇫🇷' },
-  { id: 'ru.kuliev', name: 'Russian (Kuliev)', flag: '🇷🇺' },
-  { id: 'uz.sodik', name: 'Uzbek (Sodik)', flag: '🇺🇿' },
 ];
 
 export const QURAN_TAFSEERS = [
@@ -193,5 +174,4 @@ export const QURAN_TAFSEERS = [
   { id: 'ur.kanzuliman', name: 'Kanzul Iman (Urdu)', author: 'Ahmed Raza Khan', lang: 'Urdu' },
   { id: 'tr.diyanet', name: 'Diyanet (Turkish)', author: 'Diyanet', lang: 'Turkish' },
   { id: 'ar.jalalayn', name: 'Jalalayn (Arabic)', author: 'Al-Siyuti & Al-Mahalli', lang: 'Arabic' },
-  { id: 'ar.muyassar', name: 'Al-Muyassar (Arabic)', author: 'Various', lang: 'Arabic' },
 ];

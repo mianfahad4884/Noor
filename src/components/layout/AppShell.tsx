@@ -4,7 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Hash, BookOpen, Compass, User, Book, ScrollText } from 'lucide-react';
+import { Home, Hash, BookOpen, Compass, User, Book, ScrollText, Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -14,9 +14,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { label: 'Home', icon: Home, href: '/' },
     { label: 'Quran', icon: Book, href: '/quran' },
     { label: 'Hadith', icon: ScrollText, href: '/hadith' },
+    { label: 'Calendar', icon: CalendarIcon, href: '/calendar' },
     { label: 'Duas', icon: BookOpen, href: '/duas' },
     { label: 'Tasbeeh', icon: Hash, href: '/tasbeeh' },
-    { label: 'Qibla', icon: Compass, href: '/qibla' },
     { label: 'More', icon: User, href: '/profile' },
   ];
 
