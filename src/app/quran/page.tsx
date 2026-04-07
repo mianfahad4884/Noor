@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, ChevronLeft, Loader2, Languages, BookOpen, Info, Book } from 'lucide-react';
 import { getSurahList, getSurahDetail, QURAN_EDITIONS, QURAN_TAFSEERS } from '@/lib/islamic-data';
+import { cn } from '@/lib/utils';
 
 export default function QuranPage() {
   const [mounted, setMounted] = useState(false);
