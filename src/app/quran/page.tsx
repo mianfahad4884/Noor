@@ -21,7 +21,8 @@ import {
   Volume2, 
   Type,
   Music,
-  ArrowRight
+  ArrowRight,
+  PlayCircle
 } from 'lucide-react';
 import { 
   getSurahList, 
@@ -47,6 +48,7 @@ export default function QuranPage() {
   const [reciter, setReciter] = useState('ar.alafasy');
   const [viewMode, setViewMode] = useState<'translation' | 'tafseer'>('translation');
   const [playingAyah, setPlayingAyah] = useState<number | null>(null);
+  const [isPlayingFullSurah, setIsPlayingFullSurah] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -82,10 +84,11 @@ export default function QuranPage() {
     setContentLoading(false);
   }
 
-  async function handlePlayAyah(ayahNumber: number) {
-    if (playingAyah === ayahNumber) {
+  async function handlePlayAyah(ayahNumber: number, autoPlay: boolean = false) {
+    if (!autoPlay && playingAyah === ayahNumber) {
       audioRef.current?.pause();
       setPlayingAyah(null);
+      setIsPlayingFullSurah(false);
       return;
     }
 
@@ -100,6 +103,34 @@ export default function QuranPage() {
     }
   }
 
+  const handlePlayFullSurah = () => {
+    if (isPlayingFullSurah) {
+      audioRef.current?.pause();
+      setIsPlayingFullSurah(false);
+      setPlayingAyah(null);
+    } else if (surahContent && surahContent[0].ayahs.length > 0) {
+      setIsPlayingFullSurah(true);
+      handlePlayAyah(surahContent[0].ayahs[0].number, true);
+    }
+  };
+
+  const onAudioEnded = () => {
+    if (isPlayingFullSurah && surahContent && playingAyah !== null) {
+      const ayahs = surahContent[0].ayahs;
+      const currentIndex = ayahs.findIndex((a: any) => a.number === playingAyah);
+      
+      if (currentIndex !== -1 && currentIndex < ayahs.length - 1) {
+        const nextAyah = ayahs[currentIndex + 1];
+        handlePlayAyah(nextAyah.number, true);
+      } else {
+        setIsPlayingFullSurah(false);
+        setPlayingAyah(null);
+      }
+    } else {
+      setPlayingAyah(null);
+    }
+  };
+
   function handleSurahClick(surah: any) {
     setSelectedSurah(surah);
     loadSurah(surah.number, edition, viewMode === 'tafseer' ? tafseerEdition : null);
@@ -112,8 +143,8 @@ export default function QuranPage() {
     <div className="min-h-screen pb-20">
       <audio 
         ref={audioRef} 
-        onEnded={() => setPlayingAyah(null)} 
-        onPause={() => setPlayingAyah(null)} 
+        onEnded={onAudioEnded} 
+        onPause={() => !isPlayingFullSurah && setPlayingAyah(null)} 
       />
 
       {!selectedSurah ? (
@@ -175,6 +206,7 @@ export default function QuranPage() {
                 setSelectedSurah(null);
                 setSurahContent(null);
                 setPlayingAyah(null);
+                setIsPlayingFullSurah(false);
                 audioRef.current?.pause();
               }}
             >
@@ -189,7 +221,23 @@ export default function QuranPage() {
               </div>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className={cn(
+                  "rounded-full h-10 px-3 transition-colors",
+                  isPlayingFullSurah ? "bg-accent/10 text-accent font-bold" : "text-muted-foreground hover:bg-accent/5 hover:text-accent"
+                )}
+                onClick={handlePlayFullSurah}
+                disabled={contentLoading || !surahContent}
+              >
+                {isPlayingFullSurah ? <Pause className="w-4 h-4 mr-2" /> : <PlayCircle className="w-4 h-4 mr-2" />}
+                <span className="text-[10px] uppercase tracking-widest hidden sm:inline">
+                  {isPlayingFullSurah ? 'Playing Surah' : 'Play Full'}
+                </span>
+              </Button>
+
               <Select value={reciter} onValueChange={setReciter}>
                 <SelectTrigger className="w-fit border-none shadow-none bg-transparent h-fit p-1 hover:text-accent">
                    <Music className="w-5 h-5" />
@@ -266,7 +314,10 @@ export default function QuranPage() {
                         <div className="flex flex-col gap-6">
                           <div className="flex items-center justify-between">
                              <div className="flex items-center gap-3">
-                               <Badge variant="outline" className="rounded-xl h-9 min-w-9 flex items-center justify-center border-primary/20 text-xs font-bold text-primary bg-primary/5">
+                               <Badge variant="outline" className={cn(
+                                 "rounded-xl h-9 min-w-9 flex items-center justify-center text-xs font-bold border-primary/20",
+                                 isPlaying ? "bg-accent text-accent-foreground border-accent" : "text-primary bg-primary/5"
+                               )}>
                                  {ayah.numberInSurah}
                                </Badge>
                                <Button 
@@ -291,7 +342,7 @@ export default function QuranPage() {
                             <p 
                               className={cn(
                                 "text-right text-4xl font-arabic leading-[5.5rem] text-primary tracking-wide transition-all",
-                                isPlaying && "text-accent drop-shadow-sm"
+                                isPlaying && "text-accent drop-shadow-sm font-bold"
                               )}
                               dir="rtl"
                             >
@@ -300,7 +351,10 @@ export default function QuranPage() {
                           </div>
                         </div>
                         
-                        <Card className="rounded-[2.5rem] border-none bg-accent/5 dark:bg-accent/10 p-8 shadow-sm transition-colors hover:bg-accent/10">
+                        <Card className={cn(
+                          "rounded-[2.5rem] border-none p-8 shadow-sm transition-all duration-500",
+                          isPlaying ? "bg-accent/20 scale-[1.02] shadow-accent/5" : "bg-accent/5 dark:bg-accent/10 hover:bg-accent/10"
+                        )}>
                           <div className="flex items-center gap-2 mb-4 opacity-50">
                              {viewMode === 'tafseer' ? <Info className="w-4 h-4 text-accent" /> : <BookOpen className="w-4 h-4 text-primary" />}
                              <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
