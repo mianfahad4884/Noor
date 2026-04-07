@@ -82,7 +82,8 @@ export default function CalendarPage() {
 
   const changeMonth = (offset: number) => {
     const nextDate = new Date(currentDate);
-    // Add/Subtract ~29.5 days to move to next/prev Hijri month
+    // Add/Subtract ~30 days to move to roughly the next/prev Hijri month
+    // The useMemo hook will then snap to the exact 1st of that Hijri month
     nextDate.setDate(currentDate.getDate() + (offset * 30));
     setCurrentDate(nextDate);
   };
@@ -126,7 +127,7 @@ export default function CalendarPage() {
               {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
             </Badge>
             <div className="h-1 w-1 bg-white/30 rounded-full" />
-            <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">Islamic Year 1447 AH</span>
+            <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">Islamic Era</span>
           </div>
         </CardContent>
       </Card>
