@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { getHijriMonthName, getHijriYear, ISLAMIC_EVENTS } from '@/lib/islamic-data';
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [referenceDate, setReferenceDate] = useState(new Date());
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,51 +38,53 @@ export default function CalendarPage() {
 
   // Calculate the Hijri Month Grid
   const hijriMonthData = useMemo(() => {
-    if (!mounted) return { days: [], startDay: 0, monthName: '', monthNameArabic: '', year: '' };
+    if (!mounted) return { days: [], startDay: 0, monthName: '', monthNameArabic: '', year: '', hijriMonth: 1 };
 
-    const parts = getHijriParts(currentDate);
+    // 1. Find the 1st of the current Hijri month
+    let startOfHijri = new Date(referenceDate);
+    startOfHijri.setHours(12, 0, 0, 0); // Noon to avoid boundary issues
     
-    // Find the Gregorian date of the 1st of the current Hijri month
-    const firstOfHijri = new Date(currentDate);
-    // Set time to noon to avoid midnight boundary shifts
-    firstOfHijri.setHours(12, 0, 0, 0);
-    // Back up to the start of the month
-    firstOfHijri.setDate(firstOfHijri.getDate() - (parts.day - 1));
+    let parts = getHijriParts(startOfHijri);
     
-    // Ensure we are truly on the 1st of the Hijri month
-    let currentParts = getHijriParts(firstOfHijri);
-    while (currentParts.day > 1) {
-      firstOfHijri.setDate(firstOfHijri.getDate() - 1);
-      currentParts = getHijriParts(firstOfHijri);
+    // Back up to the 1st
+    const targetMonth = parts.month;
+    const targetYear = parts.year;
+    
+    // Safety break to prevent infinite loops
+    let iterations = 0;
+    while (getHijriParts(startOfHijri).day > 1 && iterations < 35) {
+      startOfHijri.setDate(startOfHijri.getDate() - 1);
+      iterations++;
     }
+
+    const startDayOfWeek = startOfHijri.getDay();
     
-    const startDayOfWeek = firstOfHijri.getDay();
-    
-    // Generate all days for this Hijri month
+    // 2. Generate all days for this specific Hijri month
     const monthDays: Date[] = [];
-    let tempDate = new Date(firstOfHijri);
-    const targetMonth = currentParts.month;
+    let tempDate = new Date(startOfHijri);
     
-    while (getHijriParts(tempDate).month === targetMonth) {
+    iterations = 0;
+    while (getHijriParts(tempDate).month === targetMonth && iterations < 32) {
       monthDays.push(new Date(tempDate));
       tempDate.setDate(tempDate.getDate() + 1);
-      if (monthDays.length > 31) break;
+      iterations++;
     }
 
     return {
       days: monthDays,
       startDay: startDayOfWeek,
-      monthName: getHijriMonthName(firstOfHijri, 'en'),
-      monthNameArabic: getHijriMonthName(firstOfHijri, 'ar'),
-      year: getHijriYear(firstOfHijri),
+      monthName: getHijriMonthName(startOfHijri, 'en'),
+      monthNameArabic: getHijriMonthName(startOfHijri, 'ar'),
+      year: getHijriYear(startOfHijri),
+      hijriMonth: targetMonth
     };
-  }, [currentDate, mounted]);
+  }, [referenceDate, mounted]);
 
-  const changeMonth = (offset: number) => {
-    const nextDate = new Date(currentDate);
-    // Add/Subtract ~30 days to hop to next/prev Hijri month
-    nextDate.setDate(currentDate.getDate() + (offset * 30));
-    setCurrentDate(nextDate);
+  const changeHijriMonth = (offset: number) => {
+    // To change Hijri month, we add/subtract ~30 days and let the useMemo "snap" to the start
+    const nextDate = new Date(referenceDate);
+    nextDate.setDate(referenceDate.getDate() + (offset * 30));
+    setReferenceDate(nextDate);
   };
 
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -93,7 +95,7 @@ export default function CalendarPage() {
     <div className="space-y-6 pt-12 px-6 pb-32">
       <div className="space-y-2 text-center">
         <h1 className="text-3xl font-headline font-bold">Islamic Calendar</h1>
-        <p className="text-muted-foreground">Lunar month tracking (Umm al-Qura system)</p>
+        <p className="text-muted-foreground">True Lunar Hijri tracking (Umm al-Qura)</p>
       </div>
 
       {/* Hijri Month Header */}
@@ -112,10 +114,10 @@ export default function CalendarPage() {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
-                <Button size="icon" variant="ghost" className="rounded-full bg-white/10 hover:bg-white/20 h-10 w-10" onClick={() => changeMonth(-1)}>
+                <Button size="icon" variant="ghost" className="rounded-full bg-white/10 hover:bg-white/20 h-10 w-10" onClick={() => changeHijriMonth(-1)}>
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
-                <Button size="icon" variant="ghost" className="rounded-full bg-white/10 hover:bg-white/20 h-10 w-10" onClick={() => changeMonth(1)}>
+                <Button size="icon" variant="ghost" className="rounded-full bg-white/10 hover:bg-white/20 h-10 w-10" onClick={() => changeHijriMonth(1)}>
                   <ChevronRight className="w-5 h-5" />
                 </Button>
               </div>
@@ -123,7 +125,7 @@ export default function CalendarPage() {
                 variant="ghost" 
                 size="sm" 
                 className="rounded-full bg-white/5 hover:bg-white/10 text-[10px] font-bold uppercase"
-                onClick={() => setCurrentDate(new Date())}
+                onClick={() => setReferenceDate(new Date())}
               >
                 <RotateCcw className="w-3 h-3 mr-1" /> Today
               </Button>
@@ -132,10 +134,8 @@ export default function CalendarPage() {
           
           <div className="pt-2 flex items-center gap-2">
             <Badge className="bg-accent text-accent-foreground border-none font-bold uppercase tracking-tighter text-[10px] px-3">
-              {hijriMonthData.days[0]?.toLocaleString('default', { month: 'long', year: 'numeric' })}
+              {hijriMonthData.days[0]?.toLocaleString('default', { month: 'long', year: 'numeric' })} - {hijriMonthData.days[hijriMonthData.days.length-1]?.toLocaleString('default', { month: 'long', year: 'numeric' })}
             </Badge>
-            <div className="h-1 w-1 bg-white/30 rounded-full" />
-            <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest italic">Hijri Focus</span>
           </div>
         </CardContent>
       </Card>
@@ -150,7 +150,7 @@ export default function CalendarPage() {
               </div>
             ))}
             
-            {/* Empty slots for start of month */}
+            {/* Empty slots for start of Hijri month */}
             {Array.from({ length: hijriMonthData.startDay }).map((_, i) => (
               <div key={`empty-${i}`} className="aspect-square" />
             ))}
@@ -166,7 +166,7 @@ export default function CalendarPage() {
                   key={i} 
                   className={cn(
                     "aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative group",
-                    isToday ? "bg-primary text-primary-foreground shadow-lg" : "hover:bg-accent/10",
+                    isToday ? "bg-primary text-primary-foreground shadow-lg scale-110 z-10" : "hover:bg-accent/10",
                     isFriday && !isToday && "text-accent border border-accent/20"
                   )}
                 >
@@ -209,7 +209,7 @@ export default function CalendarPage() {
       <div className="flex items-start gap-3 p-5 bg-primary/5 rounded-[2rem] border border-primary/10">
         <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <p className="text-[10px] text-muted-foreground leading-relaxed">
-          This calendar uses the **Umm al-Qura** system, which is calculated based on the birth of the new moon. For specific religious fasts or festivals, please follow your local moon sighting announcements.
+          This is a <b>true Hijri calendar</b>. Unlike a Gregorian calendar with Islamic labels, this grid renders the lunar month cycles (29-30 days) and transitions directly between Hijri months.
         </p>
       </div>
     </div>
