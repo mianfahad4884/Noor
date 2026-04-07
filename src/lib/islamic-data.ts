@@ -1,7 +1,10 @@
 
+export const UMMAH_API_KEY = 'umh_316473711ce8b29689d2548be3a64eee0f39fb53';
+export const UMMAH_BASE_URL = 'https://api.alquran.cloud/v1'; // Using standard as base, but prepared for Ummah specific endpoints if needed
+
 export async function getDailyAyah() {
   try {
-    const response = await fetch('https://api.alquran.cloud/v1/ayah/random/editions/quran-uthmani,en.sahih');
+    const response = await fetch(`${UMMAH_BASE_URL}/ayah/random/editions/quran-uthmani,en.sahih`);
     const data = await response.json();
     return data.data;
   } catch (error) {
@@ -12,7 +15,7 @@ export async function getDailyAyah() {
 
 export async function getSurahList() {
   try {
-    const response = await fetch('https://api.alquran.cloud/v1/surah');
+    const response = await fetch(`${UMMAH_BASE_URL}/surah`);
     const data = await response.json();
     return data.data;
   } catch (error) {
@@ -26,11 +29,22 @@ export async function getSurahDetail(surahNumber: number, edition: string = 'en.
     const editions = ['quran-uthmani', edition];
     if (tafseerEdition) editions.push(tafseerEdition);
     
-    const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/${editions.join(',')}`);
+    const response = await fetch(`${UMMAH_BASE_URL}/surah/${surahNumber}/editions/${editions.join(',')}`);
     const data = await response.json();
     return data.data;
   } catch (error) {
     console.error('Error fetching surah detail:', error);
+    return null;
+  }
+}
+
+export async function getAyahAudio(ayahNumber: number, edition: string = 'ar.alafasy') {
+  try {
+    const response = await fetch(`${UMMAH_BASE_URL}/ayah/${ayahNumber}/${edition}`);
+    const data = await response.json();
+    return data.data.audio;
+  } catch (error) {
+    console.error('Error fetching ayah audio:', error);
     return null;
   }
 }
@@ -116,16 +130,6 @@ export const HADITHS: Hadith[] = [
     category: "Character"
   },
   {
-    id: 3,
-    text: "None of you truly believes until he loves for his brother what he loves for himself.",
-    arabic: "لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
-    source: "Sahih al-Bukhari",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 13",
-    grade: "Sahih",
-    category: "Faith"
-  },
-  {
     id: 4,
     text: "The Prophet (ﷺ) said, 'The most beloved of deeds to Allah are those that are most consistent, even if they are small.'",
     arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
@@ -136,96 +140,6 @@ export const HADITHS: Hadith[] = [
     category: "Consistency"
   },
   {
-    id: 5,
-    text: "Whoever follows a path in pursuit of knowledge, Allah will make easy for him a path to Paradise.",
-    arabic: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
-    source: "Sahih Muslim",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 2699",
-    grade: "Sahih",
-    category: "Knowledge"
-  },
-  {
-    id: 6,
-    text: "Cleanliness is half of faith.",
-    arabic: "الطُّهُورُ شَطْرُ الإِيمَانِ",
-    source: "Sahih Muslim",
-    narrator: "Abu Malik al-Ash'ari",
-    reference: "Hadith 223",
-    grade: "Sahih",
-    category: "Purity"
-  },
-  {
-    id: 7,
-    text: "The powerful man is not the one who can wrestle, but the one who can control himself in a fit of anger.",
-    arabic: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 6114",
-    grade: "Sahih",
-    category: "Character"
-  },
-  {
-    id: 8,
-    text: "A true Muslim is one from whose tongue and hand other Muslims are safe.",
-    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abdullah bin Amr",
-    reference: "Hadith 10",
-    grade: "Sahih",
-    category: "Brotherhood"
-  },
-  {
-    id: 9,
-    text: "Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
-    arabic: "إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",
-    source: "Sahih Muslim",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 2564",
-    grade: "Sahih",
-    category: "Spirituality"
-  },
-  {
-    id: 10,
-    text: "Be in this world as if you were a stranger or a traveler.",
-    arabic: "كُنْ فِي الدُّنْيَا كَأَنَّكَ غَرِيبٌ أَوْ عَابِرُ سَبِيلٍ",
-    source: "Sahih al-Bukhari",
-    narrator: "Ibn Umar",
-    reference: "Hadith 6416",
-    grade: "Sahih",
-    category: "Worldliness"
-  },
-  {
-    id: 11,
-    text: "The seeking of knowledge is obligatory for every Muslim.",
-    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 224",
-    grade: "Sahih",
-    category: "Knowledge"
-  },
-  {
-    id: 12,
-    text: "Every religion has a distinct characteristic, and the characteristic of Islam is modesty (Haya).",
-    arabic: "إِنَّ لِكُلِّ دِينٍ خُلُقًا وَخُلُقُ الإِسْلاَمِ الْحَيَاءُ",
-    source: "Sunan Ibn Majah",
-    narrator: "Anas bin Malik",
-    reference: "Hadith 4181",
-    grade: "Hasan",
-    category: "Character"
-  },
-  {
-    id: 13,
-    text: "He is not a believer whose stomach is filled while his neighbor goes hungry.",
-    arabic: "لَيْسَ الْمُؤْمِنُ بِالَّذِي يَشْبَعُ وَجَارُهُ جَائِعٌ إِلَى جَنْبِهِ",
-    source: "Al-Adab Al-Mufrad",
-    narrator: "Ibn Abbas",
-    reference: "Hadith 112",
-    grade: "Sahih",
-    category: "Community"
-  },
-  {
     id: 21,
     text: "Heaven lies under the feet of mothers.",
     arabic: "الْجَنَّةُ تَحْتَ أَقْدَامِ الأُمَّهَاتِ",
@@ -233,16 +147,6 @@ export const HADITHS: Hadith[] = [
     narrator: "Mu'awiyah bin Jahimah",
     reference: "Hadith 3106",
     grade: "Hasan",
-    category: "Parents"
-  },
-  {
-    id: 22,
-    text: "A man asked: 'O Messenger of Allah! Who is most deserving of my fine treatment?' He said: 'Your mother, then your mother, then your mother, then your father.'",
-    arabic: "يَا رَسُولَ اللَّهِ مَنْ أَحَقُّ النَّاسِ بِحُسْنِ صَحَابَتِي قَالَ ‏أُمُّكَ‏ ثُمَّ أُمُّكَ ثُمَّ أُمُّكَ ثُمَّ أَبُوكَ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 5971",
-    grade: "Sahih",
     category: "Parents"
   }
 ];
@@ -256,12 +160,25 @@ export const QURAN_EDITIONS = [
   { id: 'ur.ahmedali', name: 'Urdu (Ahmed Ali)', flag: '🇵🇰' },
   { id: 'tr.diyanet', name: 'Turkish (Diyanet)', flag: '🇹🇷' },
   { id: 'id.indonesian', name: 'Indonesian', flag: '🇮🇩' },
+  { id: 'fr.hamidullah', name: 'French (Hamidullah)', flag: '🇫🇷' },
+  { id: 'de.aburida', name: 'German (Abu Rida)', flag: '🇩🇪' },
   { id: 'bn.bengali', name: 'Bengali', flag: '🇧🇩' },
 ];
 
 export const QURAN_TAFSEERS = [
-  { id: 'en.ibnkathir', name: 'Ibn Kathir (English)', author: 'Ibn Kathir', lang: 'English' },
-  { id: 'ur.kanzuliman', name: 'Kanzul Iman (Urdu)', author: 'Ahmed Raza Khan', lang: 'Urdu' },
-  { id: 'tr.diyanet', name: 'Diyanet (Turkish)', author: 'Diyanet', lang: 'Turkish' },
-  { id: 'ar.jalalayn', name: 'Jalalayn (Arabic)', author: 'Al-Siyuti & Al-Mahalli', lang: 'Arabic' },
+  { id: 'en.ibnkathir', name: 'Ibn Kathir', author: 'Ibn Kathir', lang: 'English' },
+  { id: 'ar.jalalayn', name: 'Jalalayn', author: 'Al-Siyuti & Al-Mahalli', lang: 'Arabic' },
+  { id: 'ar.muyassar', name: 'Al-Muyassar', author: 'Muyassar', lang: 'Arabic' },
+  { id: 'ur.kanzuliman', name: 'Kanzul Iman', author: 'Ahmed Raza Khan', lang: 'Urdu' },
+];
+
+export const QURAN_RECITERS = [
+  { id: 'ar.alafasy', name: 'Mishary Alafasy' },
+  { id: 'ar.sudais', name: 'Abdurrahman Sudais' },
+  { id: 'ar.abdulbasitmurattal', name: 'Abdul Basit (Murattal)' },
+  { id: 'ar.minshawi', name: 'Muhammad Al-Minshawi' },
+  { id: 'ar.husary', name: 'Mahmoud Khalil Al-Husary' },
+  { id: 'ar.shuraym', name: 'Saud Al-Shuraim' },
+  { id: 'ar.saoodshuraym', name: 'Saud Al-Shuraim' },
+  { id: 'ar.hanirifai', name: 'Hani ar-Rifai' },
 ];
