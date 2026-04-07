@@ -43,8 +43,8 @@ export function getHijriDate(date: Date = new Date()) {
   }).format(date);
 }
 
-export function getHijriMonthName(date: Date = new Date()) {
-  return new Intl.DateTimeFormat('en-u-ca-islamic-uma', {
+export function getHijriMonthName(date: Date = new Date(), locale: string = 'en') {
+  return new Intl.DateTimeFormat(`${locale}-u-ca-islamic-uma`, {
     month: 'long',
   }).format(date);
 }
@@ -62,7 +62,7 @@ export interface IslamicEvent {
 }
 
 export const ISLAMIC_EVENTS: IslamicEvent[] = [
-  { name: "Islamic New Year", hijriDate: "1 Muharram", description: "Beginning of the Hijri year 1447 AH." },
+  { name: "Islamic New Year", hijriDate: "1 Muharram", description: "Beginning of the Hijri year." },
   { name: "Ashura", hijriDate: "10 Muharram", description: "Day of fasting and remembrance of Prophet Musa (AS)." },
   { name: "Mawlid al-Nabi", hijriDate: "12 Rabi' al-Awwal", description: "Commemoration of the birth of Prophet Muhammad (ﷺ)." },
   { name: "Isra' and Mi'raj", hijriDate: "27 Rajab", description: "The miraculous Night Journey and Ascension." },
