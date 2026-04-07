@@ -62,16 +62,16 @@ export interface IslamicEvent {
 }
 
 export const ISLAMIC_EVENTS: IslamicEvent[] = [
-  { name: "Islamic New Year", hijriDate: "1 Muharram", description: "Beginning of the Hijri year." },
-  { name: "Ashura", hijriDate: "10 Muharram", description: "Day of fasting and remembrance." },
-  { name: "Mawlid al-Nabi", hijriDate: "12 Rabi' al-Awwal", description: "Birth of Prophet Muhammad (ﷺ)." },
-  { name: "Isra' and Mi'raj", hijriDate: "27 Rajab", description: "The Night Journey and Ascension." },
-  { name: "Ramadan Start", hijriDate: "1 Ramadan", description: "Month of fasting begins." },
-  { name: "Laylat al-Qadr", hijriDate: "27 Ramadan", description: "The Night of Power." },
+  { name: "Islamic New Year", hijriDate: "1 Muharram", description: "Beginning of the Hijri year 1447." },
+  { name: "Ashura", hijriDate: "10 Muharram", description: "Day of fasting and remembrance of Prophet Musa (AS)." },
+  { name: "Mawlid al-Nabi", hijriDate: "12 Rabi' al-Awwal", description: "Commemoration of the birth of Prophet Muhammad (ﷺ)." },
+  { name: "Isra' and Mi'raj", hijriDate: "27 Rajab", description: "The miraculous Night Journey and Ascension." },
+  { name: "Ramadan Start", hijriDate: "1 Ramadan", description: "The holy month of fasting begins." },
+  { name: "Laylat al-Qadr", hijriDate: "27 Ramadan", description: "The Night of Power, better than a thousand months." },
   { name: "Eid al-Fitr", hijriDate: "1 Shawwal", description: "Festival of breaking the fast." },
-  { name: "Hajj Season", hijriDate: "8-13 Dhu al-Hijjah", description: "The annual pilgrimage to Makkah." },
-  { name: "Day of Arafah", hijriDate: "9 Dhu al-Hijjah", description: "The pinnacle of Hajj." },
-  { name: "Eid al-Adha", hijriDate: "10 Dhu al-Hijjah", description: "Festival of Sacrifice." },
+  { name: "Hajj Season", hijriDate: "8 Dhu al-Hijjah", description: "The start of the annual pilgrimage to Makkah." },
+  { name: "Day of Arafah", hijriDate: "9 Dhu al-Hijjah", description: "The pinnacle day of the Hajj pilgrimage." },
+  { name: "Eid al-Adha", hijriDate: "10 Dhu al-Hijjah", description: "Festival of Sacrifice honoring Prophet Ibrahim (AS)." },
 ];
 
 export interface Hadith {
@@ -106,26 +106,6 @@ export const HADITHS: Hadith[] = [
     category: "Faith"
   },
   {
-    id: 21,
-    text: "Heaven lies under the feet of mothers.",
-    arabic: "الْجَنَّةُ تَحْتَ أَقْدَامِ الأُمَّهَاتِ",
-    source: "Sunan an-Nasa'i",
-    narrator: "Mu'awiyah bin Jahimah",
-    reference: "Hadith 3106",
-    grade: "Hasan",
-    category: "Parents"
-  },
-  {
-    id: 22,
-    text: "A man asked: 'O Messenger of Allah! Who is most deserving of my fine treatment?' He said: 'Your mother, then your mother, then your mother, then your father.'",
-    arabic: "يَا رَسُولَ اللَّهِ مَنْ أَحَقُّ النَّاسِ بِحُسْنِ صَحَابَتِي قَالَ ‏أُمُّكَ‏ ثُمَّ أُمُّكَ ثُمَّ أُمُّكَ ثُمَّ أَبُوكَ",
-    source: "Sahih al-Bukhari",
-    narrator: "Abu Hurairah",
-    reference: "Hadith 5971",
-    grade: "Sahih",
-    category: "Parents"
-  },
-  {
     id: 2,
     text: "The best among you are those who have the best manners and character.",
     arabic: "خِيَارُكُمْ أَحْسَنُكُمْ أَخْلاَقًا",
@@ -146,6 +126,16 @@ export const HADITHS: Hadith[] = [
     category: "Faith"
   },
   {
+    id: 4,
+    text: "The Prophet (ﷺ) said, 'The most beloved of deeds to Allah are those that are most consistent, even if they are small.'",
+    arabic: "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
+    source: "Sahih al-Bukhari",
+    narrator: "Aisha (RA)",
+    reference: "Hadith 6465",
+    grade: "Sahih",
+    category: "Consistency"
+  },
+  {
     id: 5,
     text: "Whoever follows a path in pursuit of knowledge, Allah will make easy for him a path to Paradise.",
     arabic: "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ",
@@ -154,6 +144,106 @@ export const HADITHS: Hadith[] = [
     reference: "Hadith 2699",
     grade: "Sahih",
     category: "Knowledge"
+  },
+  {
+    id: 6,
+    text: "Cleanliness is half of faith.",
+    arabic: "الطُّهُورُ شَطْرُ الإِيمَانِ",
+    source: "Sahih Muslim",
+    narrator: "Abu Malik al-Ash'ari",
+    reference: "Hadith 223",
+    grade: "Sahih",
+    category: "Purity"
+  },
+  {
+    id: 7,
+    text: "The powerful man is not the one who can wrestle, but the one who can control himself in a fit of anger.",
+    arabic: "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 6114",
+    grade: "Sahih",
+    category: "Character"
+  },
+  {
+    id: 8,
+    text: "A true Muslim is one from whose tongue and hand other Muslims are safe.",
+    arabic: "الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abdullah bin Amr",
+    reference: "Hadith 10",
+    grade: "Sahih",
+    category: "Brotherhood"
+  },
+  {
+    id: 9,
+    text: "Allah does not look at your appearances or your wealth, but He looks at your hearts and your actions.",
+    arabic: "إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ وَأَمْوَالِكُمْ وَلَكِنْ يَنْظُرُ إِلَى قُلُوبِكُمْ وَأَعْمَالِكُمْ",
+    source: "Sahih Muslim",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 2564",
+    grade: "Sahih",
+    category: "Spirituality"
+  },
+  {
+    id: 10,
+    text: "Be in this world as if you were a stranger or a traveler.",
+    arabic: "كُنْ فِي الدُّنْيَا كَأَنَّكَ غَرِيبٌ أَوْ عَابِرُ سَبِيلٍ",
+    source: "Sahih al-Bukhari",
+    narrator: "Ibn Umar",
+    reference: "Hadith 6416",
+    grade: "Sahih",
+    category: "Worldliness"
+  },
+  {
+    id: 11,
+    text: "The seeking of knowledge is obligatory for every Muslim.",
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Hadith 224",
+    grade: "Sahih",
+    category: "Knowledge"
+  },
+  {
+    id: 12,
+    text: "Every religion has a distinct characteristic, and the characteristic of Islam is modesty (Haya).",
+    arabic: "إِنَّ لِكُلِّ دِينٍ خُلُقًا وَخُلُقُ الإِسْلاَمِ الْحَيَاءُ",
+    source: "Sunan Ibn Majah",
+    narrator: "Anas bin Malik",
+    reference: "Hadith 4181",
+    grade: "Hasan",
+    category: "Character"
+  },
+  {
+    id: 13,
+    text: "He is not a believer whose stomach is filled while his neighbor goes hungry.",
+    arabic: "لَيْسَ الْمُؤْمِنُ بِالَّذِي يَشْبَعُ وَجَارُهُ جَائِعٌ إِلَى جَنْبِهِ",
+    source: "Al-Adab Al-Mufrad",
+    narrator: "Ibn Abbas",
+    reference: "Hadith 112",
+    grade: "Sahih",
+    category: "Community"
+  },
+  {
+    id: 21,
+    text: "Heaven lies under the feet of mothers.",
+    arabic: "الْجَنَّةُ تَحْتَ أَقْدَامِ الأُمَّهَاتِ",
+    source: "Sunan an-Nasa'i",
+    narrator: "Mu'awiyah bin Jahimah",
+    reference: "Hadith 3106",
+    grade: "Hasan",
+    category: "Parents"
+  },
+  {
+    id: 22,
+    text: "A man asked: 'O Messenger of Allah! Who is most deserving of my fine treatment?' He said: 'Your mother, then your mother, then your mother, then your father.'",
+    arabic: "يَا رَسُولَ اللَّهِ مَنْ أَحَقُّ النَّاسِ بِحُسْنِ صَحَابَتِي قَالَ ‏أُمُّكَ‏ ثُمَّ أُمُّكَ ثُمَّ أُمُّكَ ثُمَّ أَبُوكَ",
+    source: "Sahih al-Bukhari",
+    narrator: "Abu Hurairah",
+    reference: "Hadith 5971",
+    grade: "Sahih",
+    category: "Parents"
   }
 ];
 
