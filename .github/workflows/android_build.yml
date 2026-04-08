@@ -22,7 +22,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'adopt'
           java-version: '17'
 
       - name: Install Dependencies
@@ -38,17 +38,24 @@ jobs:
           fi
           npx cap sync android
 
-      - name: List Android Files (Debug)
-        run: |
-          if [ -d "android" ]; then
-            ls -R android
-          fi
-
       - name: Build Android APK
+        id: build_apk
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace --info
+          ./gradlew assembleDebug --stacktrace --info > build_log.txt 2>&1 || (tail -n 100 build_log.txt > error_log.txt && exit 1)
+
+      - name: Post Build Logs to Summary
+        if: failure()
+        run: |
+          echo "### Build Failure Logs" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          if [ -f "android/error_log.txt" ]; then
+            cat android/error_log.txt >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No error log found." >> $GITHUB_STEP_SUMMARY
+          fi
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
